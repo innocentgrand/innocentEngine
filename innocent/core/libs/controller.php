@@ -1,5 +1,5 @@
 <?php
-class Controller extends core {
+class Controller extends Core {
 		
 		protected $_params;
 
@@ -22,6 +22,13 @@ class Controller extends core {
 				$this->_server = $_SERVER;
 				$this->_files = $_FILES;
 				$this->Session = new SessionClass();
+		}
+
+		public function startUp(){
+			
+		}
+
+		protected function modelLoader(){
 		}
 
 		public function tplPathsetter($path){
@@ -59,7 +66,11 @@ class Controller extends core {
 
                 if(!empty($mytpl)) {
                         $filename = $mytpl;
-                }
+				}
+
+				if(!file_exists($this->tplPath . DS . $filename . ".html")){
+						throw new Exception("not tpl file");
+				}
 				require( $this->tplPath . DS . $filename . ".html");
 		}
 

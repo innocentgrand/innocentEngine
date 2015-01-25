@@ -3,7 +3,6 @@ $dir = dirname(__FILE__);
 $core_dir = $dir .DS. "core" . DS;
 
 $files = autoLoad($core_dir);
-
 foreach($files as $file){
 		require_once($file);
 }
@@ -17,8 +16,13 @@ function autoLoad($dir){
 		} 
 		else if(is_file($dir.$file)) {
 				$info = pathinfo($dir.$file);
-				if($info['extension'] == 'php'){
-					$list[] = $dir.$file;
+				if($info['filename'] == 'core'){
+						require_once($dir.$file);
+				} 
+				else {	
+					if($info['extension'] == 'php'){	
+							$list[] = $dir.$file;
+					}
 				}
 		}
 		else if(is_dir($dir.$file)){

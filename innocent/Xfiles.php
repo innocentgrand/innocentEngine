@@ -7,8 +7,13 @@ require_once($rootDir . DS . "autoloader.php");
 $x_path_root = $rootDir;
 $x_path_controller = $x_path_root . DS . "controller" . DS;
 $x_path_view = $x_path_root . DS . "view" . DS;
+$x_path_log = $x_path_root . DS . "log" . DS;
+$x_path_confs = $x_path_root . DS ."confs" . DS;
 
 try{
+
+	$x_config = new CONFIG($x_path_confs);
+	
 	if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ){
 			$protocol = "https://";
 	} 
@@ -44,7 +49,10 @@ try{
 
 	$x_object = new $x_class_name();
 	$x_object->tplPathsetter($x_path_view.$x_class_sub_name);
-	
+	$x_object->logDirSetter($x_path_log);
+
+	$x_object->startUp();
+
 	if(empty($x_exp_path[2])){
 		$x_method = "Index";
 	} 
