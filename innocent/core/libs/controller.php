@@ -7,11 +7,17 @@ class Controller extends Core {
 
 		protected $_files;
 
-		protected $Session;
+		protected $session;
 
 		protected $assignData;
 
 		protected $tplPath;
+
+		protected $modelPath;
+
+		protected $models;
+
+		protected $dbSetting;
 	
 		public function __construct(){
 				parent::__construct();
@@ -25,10 +31,21 @@ class Controller extends Core {
 		}
 
 		public function startUp(){
-			
+				$this->modelLoader();
 		}
 
 		protected function modelLoader(){
+				if(!empty($this->models)){
+						foreach($this->models as $model){
+								$modelfile = $this->modelPath. ucfirst($model) . ".php";
+								if(!file_exists($modelfile)){
+									throw new Exception("not model file.");
+								}
+								require_once($modelfile);
+								$tmpModelName = ucfirst($model);
+								$this->{$tmpModelName} =  new $tmpModelName($this->dbSetting['DB']);
+						}
+				}
 		}
 
 		public function tplPathsetter($path){
@@ -39,7 +56,15 @@ class Controller extends Core {
 			$this->tplPath = $path;
 
 		}
+
+		public function modelPathSetter($path){
+				$this->modelPath = $path;
+		}
 		
+		public function dbDataSetter($data){
+			$this->dbSetting = $data;
+		}
+
 		protected function set($todata=null, $fromdata=null,$escape=true) {
                 if($escape){
                         $fromdata = $this->sanitize($fromdata);

@@ -1,11 +1,18 @@
 <?php
 defined("DS") || define("DS", DIRECTORY_SEPARATOR);
-$rootDir = dirname(__FILE__);
+$rootDir = dirname(dirname(__FILE__));
 session_start();
 require_once($rootDir . DS . "autoloader.php");
 
+///BASIC Auth////////////////////////////////////////////////////
+
+BasicAuth("test","test");
+
+///////////////////////////////////////////////////////////////
+
 $x_path_root = $rootDir;
 $x_path_controller = $x_path_root . DS . "controller" . DS;
+$x_path_modl = $x_path_root . DS . "model" . DS;
 $x_path_view = $x_path_root . DS . "view" . DS;
 $x_path_log = $x_path_root . DS . "log" . DS;
 $x_path_confs = $x_path_root . DS ."confs" . DS;
@@ -50,6 +57,8 @@ try{
 	$x_object = new $x_class_name();
 	$x_object->tplPathsetter($x_path_view.$x_class_sub_name);
 	$x_object->logDirSetter($x_path_log);
+	$x_object->modelPathSetter($x_path_modl);
+	$x_object->dbDataSetter($x_config->defaulDbGetter());
 
 	$x_object->startUp();
 
