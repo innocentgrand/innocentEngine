@@ -18,7 +18,10 @@ function autoLoad($dir){
 				$info = pathinfo($dir.$file);
 				if($info['filename'] == 'core'){
 						require_once($dir.$file);
-				} 
+				}
+				else if($info['filename'] == "Xfiles") {
+						/////////
+				}	
 				else {	
 					if($info['extension'] == 'php'){	
 							$list[] = $dir.$file;
