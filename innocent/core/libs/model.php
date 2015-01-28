@@ -45,7 +45,7 @@ TEXT;
 
 
 						$fieldSQL = "";
-						if(is_array($field)){
+						if(!is_array($field)){
 								$fieldSQL = ":field";
 						}
 						else {
