@@ -3,8 +3,9 @@ class Model extends Core {
 
 		protected $dbObject;
 
+		protected $table;
+
 		public function __construct($dbsetting){
-				pr($dbsetting);	
 				if(strtolower($dbsetting['dbkind']) == "mysql") {
 					//MySql
 						$dsn = <<<TEXT
@@ -27,12 +28,47 @@ TEXT;
 		protected function startUp(){
 		}
 
-		protected function makeDbObject($dsn,$uid,$upass){
+		protected function makeDbObject($dsn,$uid,$upass,$charset="utf8"){
 				try{
-						$this->dbObject = new PDO($dsn,$uid,$upass);	
+						$this->dbObject = new PDO($dsn,$uid,$upass);
+						$stmt = $this->dbObject->prepare("SET NAMES :charset");
+
+						$stmt->bindValue(":charset", $charset, PDO::PARAM_STR);
+
 				} catch(PDOException $ex){
 					throw $ex;
 				}
+		}
+
+		public function find($kind, $field = array(),$conditions = array()){
+				try{
+
+
+						$fieldSQL = "";
+						if(is_array($field)){
+								$fieldSQL = ":field";
+						}
+						else {
+								$no = 0;
+								foreach($field as $val){
+										if($fieldSQL == ""){
+												$fieldSQL = ":field_" . $no;
+										}
+										else {
+												$fieldSQL .= ":field_" . $no;
+										}
+										$no++;
+								}
+						}
+						
+						$sql = <<<SQL
+SELECT {$fieldSQL} FROM {$this->table}
+SQL;
+						pr($sql);
+				
+				} catch(PDOException $ex){
+					throw $ex;
+				}	
 		}
 
 }
