@@ -1,11 +1,11 @@
 <?php 
 class Model extends Core {
 		
-		const CONDITION_SIMPLE = 2;
-		const CONDITION_LITTLE_VERY = 3;
-		const CONDITION_MIDDLE_VERY = 4;
-		const CONDITION_ULTRA_VERY = 5;
-		const CONDITION_OBSCURITY = 6;
+		const CONDITION_SIMPLE = 1;
+		const CONDITION_LITTLE_VERY = 2;
+		const CONDITION_MIDDLE_VERY = 3;
+		const CONDITION_ULTRA_VERY = 4;
+		const CONDITION_OBSCURITY = 5;
 
 		protected $dbObject;
 
@@ -46,7 +46,7 @@ TEXT;
 				}
 		}
 
-		public function find($kind, $conditions = array(), $field = array()){
+		public function find($kind, $conditions = array(), $field = array(),$order = array(),$limit = aray()){
 				try{
 
 
@@ -85,12 +85,35 @@ TEXT;
 											}
 											$no++;
 									}
+								}
+								else if(array_depth($conditions) == self::CONDITION_LITTLE_VERY){
+									foreach($conditions as $term => $val){
+											$subWhere = "";	
+											foreach($val as $column => $value){
+												if($subWhere == ""){
+													$subWhere = "(:column_" . $no . " = :value_" . $no;
+												}
+												else {
+													$subWhere .= " {$term} :column_" . $no . " = :value_" . $no;
+												}
+												$no++;
+											}
+											if($whereSQL == ""){
+													$whereSQL = " WHERE " . $subWhere . ")";
+											}
+											else {
+													$whereSQL .= " AND " . $subWhere . ")";
+											}
+									}
 								}	
 						}	
 						
 						$sql = <<<SQL
 SELECT {$fieldSQL} FROM {$this->table}
 SQL;
+						if($whereSQL != ""){
+							$sql .= $whereSQL;
+						}
 						pr($sql);
 				
 				} catch(PDOException $ex){
