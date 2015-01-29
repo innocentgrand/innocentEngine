@@ -3,6 +3,10 @@ $dir = dirname(__FILE__);
 $core_dir = $dir .DS. "core" . DS;
 
 $files = autoLoad($core_dir);
+
+//優先度が超高いものを先に読んでおく
+require_once($core_dir."libs".DS."util.php");
+
 foreach($files as $file){
 		require_once($file);
 }
@@ -20,6 +24,9 @@ function autoLoad($dir){
 						require_once($dir.$file);
 				}
 				else if($info['filename'] == "Xfiles") {
+						/////////
+				}	
+				else if($info['filename'] == "util") {
 						/////////
 				}	
 				else {	

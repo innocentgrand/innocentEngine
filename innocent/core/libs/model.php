@@ -45,21 +45,38 @@ TEXT;
 
 
 						$fieldSQL = "";
-						if(!is_array($field)){
-								$fieldSQL = ":field";
+						if(!empty($field)) {
+							if(!is_array($field)){
+									$fieldSQL = ":field";
+							}
+							else {
+									$no = 0;
+									foreach($field as $val){
+											if($fieldSQL == ""){
+													$fieldSQL = ":field_" . $no;
+											}
+											else {
+													$fieldSQL .= ":field_" . $no;
+											}
+											$no++;
+									}
+							}
 						}
 						else {
-								$no = 0;
-								foreach($field as $val){
-										if($fieldSQL == ""){
-												$fieldSQL = ":field_" . $no;
-										}
-										else {
-												$fieldSQL .= ":field_" . $no;
-										}
-										$no++;
-								}
+							$fieldSQL = "*";
 						}
+
+						$whereSQL = "";
+						if(!empty($conditions)){
+								$no = 0;
+								foreach($conditions as $column => $value){
+										if($whereSQL == ""){
+												$whereSQL = "WHERE :column_" . $no . " = :value_" . $no; 
+										} else {
+												$whereSQL .= " AND :column_" . $no . " = :value_" . $no; 
+										}
+								}		
+						}	
 						
 						$sql = <<<SQL
 SELECT {$fieldSQL} FROM {$this->table}

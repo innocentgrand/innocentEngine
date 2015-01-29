@@ -15,3 +15,15 @@ function BasicAuth($user,$pass){
 		}
 }
 
+function array_depth($arr, $blank=false, $depth=0){
+    if( !is_array($arr)){
+        return $depth;
+    } else {
+        $depth++;
+        $tmp = ($blank) ? array($depth) : array(0);
+        foreach($arr as $value){
+            $tmp[] = array_depth($value, $blank, $depth);
+        }
+        return max($tmp);
+    }
+}
