@@ -1,5 +1,11 @@
 <?php 
 class Model extends Core {
+		
+		const CONDITION_SIMPLE = 2;
+		const CONDITION_LITTLE_VERY = 3;
+		const CONDITION_MIDDLE_VERY = 4;
+		const CONDITION_ULTRA_VERY = 5;
+		const CONDITION_OBSCURITY = 6;
 
 		protected $dbObject;
 
@@ -40,7 +46,7 @@ TEXT;
 				}
 		}
 
-		public function find($kind, $field = array(),$conditions = array()){
+		public function find($kind, $conditions = array(), $field = array()){
 				try{
 
 
@@ -51,12 +57,12 @@ TEXT;
 							}
 							else {
 									$no = 0;
-									foreach($field as $val){
+									foreach($field as $f){
 											if($fieldSQL == ""){
 													$fieldSQL = ":field_" . $no;
 											}
 											else {
-													$fieldSQL .= ":field_" . $no;
+													$fieldSQL .= ",:field_" . $no;
 											}
 											$no++;
 									}
@@ -69,13 +75,17 @@ TEXT;
 						$whereSQL = "";
 						if(!empty($conditions)){
 								$no = 0;
-								foreach($conditions as $column => $value){
-										if($whereSQL == ""){
-												$whereSQL = "WHERE :column_" . $no . " = :value_" . $no; 
-										} else {
-												$whereSQL .= " AND :column_" . $no . " = :value_" . $no; 
-										}
-								}		
+								pr($conditions);
+								if(array_depth($conditions) == self::CONDITION_SIMPLE){
+									foreach($conditions as $column => $value){
+											if($whereSQL == ""){
+													$whereSQL = "WHERE :column_" . $no . " = :value_" . $no; 
+											} else {
+													$whereSQL .= " AND :column_" . $no . " = :value_" . $no; 
+											}
+											$no++;
+									}
+								}	
 						}	
 						
 						$sql = <<<SQL
