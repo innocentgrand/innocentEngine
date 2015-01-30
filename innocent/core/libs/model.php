@@ -26,7 +26,7 @@ TEXT;
 					//SQLServer
 				}
 
-
+				$this->table = strtolower(get_class($this));
 
 				$this->startUp();
 		}
@@ -46,7 +46,7 @@ TEXT;
 				}
 		}
 
-		public function find($kind, $conditions = array(), $field = array(),$order = array(),$limit = aray()){
+		public function find($kind, $conditions = array(), $field = array(),$order = array(),$limit = array()){
 				try{
 
 
@@ -105,6 +105,9 @@ TEXT;
 													$whereSQL .= " AND " . $subWhere . ")";
 											}
 									}
+								}
+								else if(array_depth($conditions) == self::CONDITION_MIDDLE_VERY){
+								
 								}	
 						}	
 						

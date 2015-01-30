@@ -21,6 +21,12 @@ try{
 
 	$x_config = new CONFIG($x_path_confs);
 	
+	$tmpHi = $x_config->getHierarchy();
+
+	if(!empty($tmpHi)){
+			
+	}
+
 	if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ){
 			$protocol = "https://";
 	} 
