@@ -5,6 +5,8 @@ class CONFIG extends Core {
 
 		protected $hierarchy;
 
+		protected $aliasdata;
+
 		public function __construct($path){
 				parent::__construct();
 				$dbINI = $path . "db.ini";
@@ -15,6 +17,10 @@ class CONFIG extends Core {
 				if(file_exists($hiINI)){
 						$this->hierarchy = parse_ini_file($hiINI,true);
 				}
+				$aliasINI = $path . "alias.ini";
+				if(file_exists($aliasINI)){
+					$this->aliasdata = parse_ini_file($aliasINI,true);	
+				}
 		}
 
 		public function defaulDbGetter(){
@@ -23,6 +29,10 @@ class CONFIG extends Core {
 
 		public function getHierarchy(){
 			return $this->hierarchy;
+		}
+
+		public function getAlias(){
+			return $this->aliasdata;
 		}
 		
 }

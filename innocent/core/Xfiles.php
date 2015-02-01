@@ -23,8 +23,16 @@ try{
 	
 	$tmpHi = $x_config->getHierarchy();
 
+	$x_object_alias = new Alias();
+
 	if(!empty($tmpHi)){
-			
+
+	}
+
+	$tmpAlias = $x_config->getAlias();
+
+	if(!empty($tmpAlias)){
+		pr($tmpAlias);
 	}
 
 	if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ){

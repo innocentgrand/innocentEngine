@@ -75,7 +75,6 @@ TEXT;
 						$whereSQL = "";
 						if(!empty($conditions)){
 								$no = 0;
-								pr($conditions);
 								if(array_depth($conditions) == self::CONDITION_SIMPLE){
 									foreach($conditions as $column => $value){
 											if($whereSQL == ""){
@@ -117,7 +116,6 @@ SQL;
 						if($whereSQL != ""){
 							$sql .= $whereSQL;
 						}
-						pr($sql);
 				
 				} catch(PDOException $ex){
 					throw $ex;

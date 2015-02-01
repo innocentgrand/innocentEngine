@@ -15,7 +15,7 @@ class Controller extends Core {
 
 		protected $modelPath;
 
-		protected $models;
+		public $models;
 
 		protected $dbSetting;
 	
@@ -33,6 +33,7 @@ class Controller extends Core {
 		public function startUp(){
 				$this->modelLoader();
 		}
+
 
 		protected function modelLoader(){
 				if(!empty($this->models)){
