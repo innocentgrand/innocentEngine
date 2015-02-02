@@ -13,10 +13,10 @@ class CONFIG extends Core {
 				if(file_exists($dbINI)){
 						$this->dbSetting = parse_ini_file($dbINI,true);
 				}
-				$hiINI = $path . "hi.ini";
+				/*$hiINI = $path . "hi.ini";
 				if(file_exists($hiINI)){
 						$this->hierarchy = parse_ini_file($hiINI,true);
-				}
+				}*/
 				$aliasINI = $path . "alias.ini";
 				if(file_exists($aliasINI)){
 					$this->aliasdata = parse_ini_file($aliasINI,true);	
