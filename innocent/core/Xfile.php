@@ -1,5 +1,12 @@
 <?php
 class XFile {
+
+	const DIRNAME_CONT = "controller";
+	const DIRNAME_MODEL = "model";
+	const DIRNAME_VIEW = "view";
+	const DIRNAME_LOG = "log";
+	const DIRNAME_CONFS = "confs";
+		
 	private $x_path_root;
 	private $x_path_controller;
 	private $x_path_model;
@@ -17,6 +24,14 @@ class XFile {
 
 	public function __construct($rootDir){
 		$this->x_path_root = $rootDir;
+		/*
+		$this->x_path_controller = $this->x_path_root . DS . 'controller' . DS;
+		$this->x_path_model = $this->x_path_root . DS . 'model' . DS;
+		$this->x_path_view = $this->x_path_root . DS . 'view' . DS;
+		$this->x_path_log = $this->x_path_root . DS . 'log' . DS;
+		$this->x_path_confs = $this->x_path_root . DS . 'confs' . DS;
+		 */
+
 		$this->x_path_controller = $this->x_path_root . DS . 'controller' . DS;
 		$this->x_path_model = $this->x_path_root . DS . 'model' . DS;
 		$this->x_path_view = $this->x_path_root . DS . 'view' . DS;
@@ -105,12 +120,17 @@ class XFile {
 	public function getViewPath(){
 		$tmpViewDir = "";
 		if(!empty($this->subDirName)){
-			$tmpViewDir = $this->subDirName . DS . $this->subClassName;
+			$tmpViewDir = $this->subDirName . DS;
 		}
 		else {
-			$tmpViewDir = $this->subClassName;
+			$tmpViewDir = "";
 		}
+
 		return $tmpViewDir;
+	}
+
+	public function getSubClassName(){
+		return $this->subClassName;
 	}
 
 }
