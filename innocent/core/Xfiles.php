@@ -22,20 +22,6 @@ try{
 	$FWM = new XFile($x_path_root);
 	
 	$x_config = new CONFIG($x_path_confs);
-	
-	$tmpHi = $x_config->getHierarchy();
-
-	$x_object_alias = new Alias();
-
-	if(!empty($tmpHi)){
-
-	}
-
-	$tmpAlias = $x_config->getAlias();
-
-	if(!empty($tmpAlias)){
-		pr($tmpAlias);
-	}
 
 	if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ){
 			$protocol = "https://";
@@ -45,7 +31,11 @@ try{
 	}
 	$x_request = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
+	$FWM->request($x_request);
+
 	$x_parse_url = parse_url($x_request);
+
+	
 
 	$x_exp_path = explode('/',$x_parse_url["path"]);
 	
