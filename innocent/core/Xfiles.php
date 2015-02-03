@@ -35,8 +35,9 @@ try{
 
 	$x_parse_url = parse_url($x_request);
 
+	$FWM->makeCObject();	
 	
-
+	/*
 	$x_exp_path = explode('/',$x_parse_url["path"]);
 	
 	if($x_exp_path[1] == ""){
@@ -61,7 +62,9 @@ try{
 	}
 
 	$x_object = new $x_class_name();
-	$x_object->tplPathsetter($x_path_view.$x_class_sub_name);
+	 */
+	$x_object = $FWM->makeCObject();
+	$x_object->tplPathsetter($x_path_view.$FWM->getViewPath());
 	$x_object->logDirSetter($x_path_log);
 	$x_object->modelPathSetter($x_path_modl);
 	$x_object->dbDataSetter($x_config->defaulDbGetter());

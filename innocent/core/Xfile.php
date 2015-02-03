@@ -47,10 +47,70 @@ class XFile {
 	public function request($req){
 			$this->x_request = $req;
 	}
-	
-	private function makeCObject(){
-		$x_parse_url = parse_url($this->request);
-		pr($x_parse_url);
+
+	private $subDirName;	
+	private $subClassName;	
+	public function makeCObject(){
+		$x_parse_url = parse_url($this->x_request);
+		$x_exp_path = explode('/',$x_parse_url['path']);
+		foreach($this->hierarchy as $hiKey => $hiValue){
+				if(!empty($x_exp_path[1])){
+						$tmpPath = "/" . $x_exp_path[1];
+				}
+				else {
+						$tmpPath = "";
+				}
+
+				if($hiValue['alias'] == $tmpPath) {
+						if($x_exp_path[2] == ""){
+							$x_class_sub_name = "Default";
+						}
+						else {
+							$x_class_sub_name = ucfirst($x_exp_path[2]);
+						}
+						$x_class_name = $x_class_sub_name."Controller";
+						$x_controller_file = $this->x_path_controller . $hiValue['hi'] . DS . $x_class_name . ".php";
+					   $this->subDirName = $hiValue['hi'];	
+				} 
+				else {
+					if($x_exp_path[1] == ""){
+						$x_class_sub_name = "Default";
+					} 
+					else {
+						$x_class_sub_name = ucfirst($x_exp_path[1]);
+					}
+					$x_class_name = $x_class_sub_name."Controller";
+					$x_controller_file = $this->x_path_controller .  $x_class_name . ".php";
+				}
+				
+				$this->subClassName = $x_class_sub_name;
+
+				if(!file_exists($x_controller_file)){
+					throw new Exception("file not exists");
+				}	
+
+				require_once($x_controller_file);
+
+				if(!class_exists($x_class_name)){
+					throw new Exception("class not exists");
+				}
+
+				$x_object = new $x_class_name();
+		
+				return $x_object;
+		}
+
+	}
+
+	public function getViewPath(){
+		$tmpViewDir = "";
+		if(!empty($this->subDirName)){
+			$tmpViewDir = $this->subDirName . DS . $this->subClassName;
+		}
+		else {
+			$tmpViewDir = $this->subClassName;
+		}
+		return $tmpViewDir;
 	}
 
 }
