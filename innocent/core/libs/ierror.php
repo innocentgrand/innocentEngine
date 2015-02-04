@@ -1,4 +1,5 @@
 <?php
+/*
 register_shutdown_function(
     function(){
         $e = error_get_last();
@@ -21,3 +22,4 @@ register_shutdown_function(
 set_error_handler(function($errno, $errstr, $errfile, $errline){
     throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
 });
+ */

@@ -31,26 +31,27 @@ class XFile {
 		$this->x_path_log = $this->x_path_root . DS . 'log' . DS;
 		$this->x_path_confs = $this->x_path_root . DS . 'confs' . DS;
 		 */
-
-		$this->x_path_controller = $this->x_path_root . DS . 'controller' . DS;
-		$this->x_path_model = $this->x_path_root . DS . 'model' . DS;
-		$this->x_path_view = $this->x_path_root . DS . 'view' . DS;
-		$this->x_path_log = $this->x_path_root . DS . 'log' . DS;
-		$this->x_path_confs = $this->x_path_root . DS . 'confs' . DS;
+		$this->x_path_controller = $this->x_path_root . DS;
+		$this->x_path_model = $this->x_path_root . DS;
+		$this->x_path_view = $this->x_path_root . DS;
+		$this->x_path_log = $this->x_path_root . DS;
+		$this->x_path_confs = $this->x_path_root . DS . self::DIRNAME_CONFS;
 		
 		try{
 			$this->x_config = new CONFIG($this->x_path_confs);
-			$tmpAlias = $this->x_config->getAlias();	
-			$i = 0;
-			foreach($tmpAlias as $alias => $value){
-				$this->hierarchy[$i]["alias"] = $alias;
-				if(!empty($value)){
-						$this->hierarchy[$i]["hi"] = $value;
+			$tmpAlias = $this->x_config->getAlias();
+			if(!empty($tmpAlias)){
+				$i = 0;
+				foreach($tmpAlias as $alias => $value){
+					$this->hierarchy[$i]["alias"] = $alias;
+					if(!empty($value)){
+							$this->hierarchy[$i]["hi"] = $value;
+					}
+					else {
+							$this->hierarchy[$i]["hi"] = null;
+					}
+					$i++;
 				}
-				else {
-						$this->hierarchy[$i]["hi"] = null;
-				}
-				$i++;
 			}
 
 		}catch(Exception $ex){
@@ -68,6 +69,9 @@ class XFile {
 	public function makeCObject(){
 		$x_parse_url = parse_url($this->x_request);
 		$x_exp_path = explode('/',$x_parse_url['path']);
+		if(empty($this->hierarchy)) {
+			return;
+		}
 		foreach($this->hierarchy as $hiKey => $hiValue){
 				if(!empty($x_exp_path[1])){
 						$tmpPath = "/" . $x_exp_path[1];
@@ -115,6 +119,12 @@ class XFile {
 				return $x_object;
 		}
 
+	}
+
+	private function makeObject($className,$path){
+
+
+		
 	}
 
 	public function getViewPath(){
