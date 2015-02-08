@@ -36,7 +36,7 @@ class XFile {
 		$this->x_path_controller = $this->x_path_root . DS;
 		$this->x_path_model = $this->x_path_root . DS;
 		$this->x_path_view = $this->x_path_root . DS;
-		$this->x_path_log = $this->x_path_root . DS;
+		$this->x_path_log = $this->x_path_root . DS . self::DIRNAME_LOG . DS;
 		$this->x_path_confs = $this->x_path_root . DS . self::DIRNAME_CONFS .DS;
 		
 		try{
@@ -131,13 +131,50 @@ class XFile {
 		$tmpViewDir = "";
 
 		if(!empty($this->x_exp_path)){
+			$tmpPath = "/" . $this->x_exp_path[1];
+			if(!empty($this->hierarchy)){
+				foreach($this->hierarchy as $hiKey => $hiValue){
+					if($tmpPath == $hiValue['alias']){
+						$tmpViewDir = $this->x_path_root . DS . $hiValue['hi']['hi'] . DS . self::DIRNAME_VIEW . DS . $this->subClassName;
+					}
+				}
+			}
+			if($tmpViewDir == ""){
+				$tmpViewDir = $this->x_path_root . DS .self::DIRNAME_VIEW . DS . $this->subClassName;
+			}
+			return $tmpViewDir;
 		}
 		else {
 			$tmpViewDir = $this->x_path_root . DS . self::DIRNAME_VIEW .DS;
 		}
-
-		pr($tmpViewDir);
 		return $tmpViewDir;
+	}
+	
+	public function getModelPath(){
+		$tmpModelDir = "";
+
+		if(!empty($this->x_exp_path)){
+			$tmpPath = "/" . $this->x_exp_path[1];
+			if(!empty($this->hierarchy)){
+				foreach($this->hierarchy as $hiKey => $hiValue){
+					if($tmpPath == $hiValue['alias']){
+						$tmpModelDir = $this->x_path_root . DS . $hiValue['hi']['hi'] . DS . self::DIRNAME_MODEL . DS;
+					}
+				}
+			}
+			if($tmpModelDir == ""){
+				$tmpModelDir = $this->x_path_root . DS .self::DIRNAME_MODEL . DS;
+			}
+			return $tmpModelDir;
+		}
+		else {
+			$tmpModelDir = $this->x_path_root . DS . self::DIRNAME_MODEL .DS;
+		}
+		return $tmpModelDir;
+	}
+
+	public function getLogDirPath(){
+		return 	$this->x_path_log;
 	}
 
 	public function getSubClassName(){

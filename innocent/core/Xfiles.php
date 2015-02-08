@@ -38,8 +38,8 @@ try{
 	$FWM->makeCObject();	
 	$x_object = $FWM->makeCObject();
 	$x_object->tplPathsetter($FWM->getViewPath());
-	$x_object->logDirSetter($x_path_log);
-	$x_object->modelPathSetter($x_path_modl);
+	$x_object->logDirSetter($FWM->getLogDirPath());
+	$x_object->modelPathSetter($FWM->getModelPath());
 	$x_object->dbDataSetter($x_config->defaulDbGetter());
 
 	$x_object->startUp();
