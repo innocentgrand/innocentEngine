@@ -36,35 +36,8 @@ try{
 	$x_parse_url = parse_url($x_request);
 
 	$FWM->makeCObject();	
-	
-	/*
-	$x_exp_path = explode('/',$x_parse_url["path"]);
-	
-	if($x_exp_path[1] == ""){
-			$x_class_sub_name = "Default";
-	} 
-	else {
-			$x_class_sub_name = ucfirst($x_exp_path[1]);
-	}
-	
-	$x_class_name = $x_class_sub_name."Controller";
-	
-	$x_controller_file = $x_path_controller . $x_class_name . ".php";
-
-	if(!file_exists($x_controller_file)){
-		throw new Exception("file not exists");
-	}
-
-	require_once($x_controller_file);
-
-	if(!class_exists($x_class_name)){
-		throw new Exception("class not exists");
-	}
-
-	$x_object = new $x_class_name();
-	 */
 	$x_object = $FWM->makeCObject();
-	$x_object->tplPathsetter($FWM->getViewPath() . $x_path_view);
+	$x_object->tplPathsetter($FWM->getViewPath());
 	$x_object->logDirSetter($x_path_log);
 	$x_object->modelPathSetter($x_path_modl);
 	$x_object->dbDataSetter($x_config->defaulDbGetter());

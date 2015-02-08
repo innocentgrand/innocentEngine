@@ -8,7 +8,7 @@ class CONFIG extends Core {
 		protected $aliasdata;
 
 		public function __construct($path){
-				parent::__construct();
+			parent::__construct();
 				$dbINI = $path . "db.ini";
 				if(file_exists($dbINI)){
 						$this->dbSetting = parse_ini_file($dbINI,true);
