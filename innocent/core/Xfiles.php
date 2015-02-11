@@ -44,12 +44,9 @@ try{
 
 	$x_object->startUp();
 
-	if(empty($x_exp_path[2])){
-		$x_method = "Index";
-	} 
-	else {
-		$x_mehod = ucfirst($x_exp_path[2]);
-	}
+	$x_method = $FWM->getMethodName();
+
+	$x_class_name = get_class($x_object);
 
 	if(!method_exists($x_object,$x_method)){
 			$text = <<<TEXT

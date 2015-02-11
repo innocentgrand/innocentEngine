@@ -173,6 +173,35 @@ class XFile {
 		return $tmpModelDir;
 	}
 
+	public function getMethodName(){
+		
+		if(!empty($this->x_exp_path)){
+			$tmpName = "/" . $this->x_exp_path[1];
+			$methodName = "";
+			if(!empty($this->hierarchy)){
+				foreach($this->hierarchy as $hiKey => $hiValue){
+					if($tmpName == $hiValue['alias']){
+						if(!empty($this->x_exp_path[3])){
+							$methodName = ucfirst($x_exp_path[3]);
+						}
+						if($methodName != ""){
+							$methodName = "Index";
+						}
+					}
+				}
+			}
+			if($methodName == ""){
+				if(!empty($this->x_exp_path[2])){
+					$methodName = ucfirst($this->x_exp_path[2]);
+				}
+				else {
+					$methodName = "Index";
+				}
+			}	
+		}
+		return $methodName;
+	}
+
 	public function getLogDirPath(){
 		return 	$this->x_path_log;
 	}
