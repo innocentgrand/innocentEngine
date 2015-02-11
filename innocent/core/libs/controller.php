@@ -93,6 +93,7 @@ class Controller extends Core {
                 if(!empty($mytpl)) {
                         $filename = $mytpl;
 				}
+				$filename = strtolower($filename);
 
 				if(!file_exists($this->tplPath . DS . $filename . ".html")){
 						throw new Exception("not tpl file");

@@ -184,7 +184,7 @@ class XFile {
 						if(!empty($this->x_exp_path[3])){
 							$methodName = ucfirst($x_exp_path[3]);
 						}
-						if($methodName != ""){
+						if($methodName == ""){
 							$methodName = "Index";
 						}
 					}

@@ -41,11 +41,9 @@ try{
 	$x_object->logDirSetter($FWM->getLogDirPath());
 	$x_object->modelPathSetter($FWM->getModelPath());
 	$x_object->dbDataSetter($x_config->defaulDbGetter());
-
 	$x_object->startUp();
 
 	$x_method = $FWM->getMethodName();
-
 	$x_class_name = get_class($x_object);
 
 	if(!method_exists($x_object,$x_method)){
