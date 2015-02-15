@@ -55,6 +55,7 @@ TEXT;
 
 	$x_object->$x_method();
 
+	$x_object->shutDown();
 } catch (Exception $ex){
 	echo nl2br($ex->getMessage());
 }

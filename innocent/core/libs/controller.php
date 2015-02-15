@@ -104,6 +104,10 @@ class Controller extends Core {
 		public function h($str){
                 return htmlspecialchars($str, ENT_QUOTES);
         }
+		
+		public function shutDown(){
+			
+		}
 
 		public function __destruct(){
 				parent::__destruct();
