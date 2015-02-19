@@ -10,6 +10,8 @@ class Model extends Core {
 		protected $dbObject;
 
 		protected $table;
+		
+		protected $columns;
 
 		public function __construct($dbsetting){
 				if(strtolower($dbsetting['dbkind']) == "mysql") {
@@ -27,6 +29,8 @@ TEXT;
 				}
 
 				$this->table = strtolower(get_class($this));
+				
+				$this->getColumn();
 
 				$this->startUp();
 		}
@@ -34,24 +38,34 @@ TEXT;
 		protected function startUp(){
 		}
 
+		protected function getColumn(){
+			$stmt = $this->dbObject->query("SELECT * FROM {$this->table} LIMIT 0");
+			$i = 0;
+			while($column = $stmt->getColumnMeta($i++)){
+				pr($column);
+			}
+		}
+
 		protected function makeDbObject($dsn,$uid,$upass,$charset="utf8"){
 				try{
-						$this->dbObject = new PDO($dsn,$uid,$upass);
+					$this->dbObject = new PDO($dsn,$uid,$upass);
 						$stmt = $this->dbObject->prepare("SET NAMES :charset");
 
 						$stmt->bindValue(":charset", $charset, PDO::PARAM_STR);
+						
+						$this->dbObject->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
 				} catch(PDOException $ex){
 					throw $ex;
 				}
 		}
 
-		public function find($kind, $conditions = array(), $field = array(),$order = array(),$limit = array()){
+		public function find($kind, $option = array()){
 				try{
 
-
 						$fieldSQL = "";
-						if(!empty($field)) {
+						if(!empty($option['field'])) {
+							$field = $option['field'];
 							if(!is_array($field)){
 									$fieldSQL = ":field";
 							}
@@ -73,7 +87,8 @@ TEXT;
 						}
 
 						$whereSQL = "";
-						if(!empty($conditions)){
+						if(!empty($option['conditions'])){
+								$conditions = $option['conditions'];
 								$no = 0;
 								if(array_depth($conditions) == self::CONDITION_SIMPLE){
 									foreach($conditions as $column => $value){
@@ -113,13 +128,18 @@ TEXT;
 						$sql = <<<SQL
 SELECT {$fieldSQL} FROM {$this->table}
 SQL;
+
+					if($kind == 'first'){
+						
+					}
+
 						if($whereSQL != ""){
 							$sql .= $whereSQL;
 						}
 				
 				} catch(PDOException $ex){
 					throw $ex;
-				}	
+				}
 		}
 
 }
