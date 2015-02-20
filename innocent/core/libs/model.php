@@ -42,7 +42,16 @@ TEXT;
 			$stmt = $this->dbObject->query("SELECT * FROM {$this->table} LIMIT 0");
 			$i = 0;
 			while($column = $stmt->getColumnMeta($i++)){
-				pr($column);
+				$this->columns["name"][$i] = $column["name"];
+				$this->columns["type"][$i] = $column["native_type"];
+				switch($column["native_type"]){
+					case 'LONGLONG':
+						$this->columns["type"][$i] = PDO::PARAM_INT;
+						break;
+					default:
+						$this->columns["type"][$i] = PDO::PARAM_STR;
+						break;
+				}
 			}
 		}
 
