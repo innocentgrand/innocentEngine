@@ -71,84 +71,59 @@ TEXT;
 
 		public function find($kind, $option = array()){
 				try{
-
-						$fieldSQL = "";
-						if(!empty($option['field'])) {
-							$field = $option['field'];
-							if(!is_array($field)){
-									$fieldSQL = ":field";
-							}
-							else {
-									$no = 0;
-									foreach($field as $f){
-											if($fieldSQL == ""){
-													$fieldSQL = ":field_" . $no;
-											}
-											else {
-													$fieldSQL .= ",:field_" . $no;
-											}
-											$no++;
-									}
-							}
-						}
-						else {
-							$fieldSQL = "*";
-						}
-
-						$whereSQL = "";
-						if(!empty($option['conditions'])){
-								$conditions = $option['conditions'];
-								$no = 0;
-								if(array_depth($conditions) == self::CONDITION_SIMPLE){
-									foreach($conditions as $column => $value){
-											if($whereSQL == ""){
-													$whereSQL = "WHERE :column_" . $no . " = :value_" . $no; 
-											} else {
-													$whereSQL .= " AND :column_" . $no . " = :value_" . $no; 
-											}
-											$no++;
-									}
-								}
-								else if(array_depth($conditions) == self::CONDITION_LITTLE_VERY){
-									foreach($conditions as $term => $val){
-											$subWhere = "";	
-											foreach($val as $column => $value){
-												if($subWhere == ""){
-													$subWhere = "(:column_" . $no . " = :value_" . $no;
-												}
-												else {
-													$subWhere .= " {$term} :column_" . $no . " = :value_" . $no;
-												}
-												$no++;
-											}
-											if($whereSQL == ""){
-													$whereSQL = " WHERE " . $subWhere . ")";
-											}
-											else {
-													$whereSQL .= " AND " . $subWhere . ")";
-											}
-									}
-								}
-								else if(array_depth($conditions) == self::CONDITION_MIDDLE_VERY){
-								
-								}	
-						}	
-						
-						$sql = <<<SQL
-SELECT {$fieldSQL} FROM {$this->table}
-SQL;
-
-					if($kind == 'first'){
-						
+					
+					$sql = "SELECT ";
+					if(!empty($option['fields'])){
+						$fieldData = $option['fields'];
+					} else {
+						$fieldData = null;
 					}
-
-						if($whereSQL != ""){
-							$sql .= $whereSQL;
-						}
+					switch($kind){
+						case 'first':
+							$field = $this->makeFields($fieldData);
+							$sql .= $field;
+							$sql .= " FROM {$this->table} ";
+							pr($sql);
+							$stn = $this->dbObject->prepare($sql);
+							break;
+						case 'all':
+							$field = $this->makeFields($fieldData);
+							break;
+						case 'count':
+							$field = $this->makeFields($fieldData);
+							$field = "({$field}) AS counter";
+							break;
+					}
+					pr($field);
 				
 				} catch(PDOException $ex){
 					throw $ex;
 				}
+		}
+
+		protected function makeFields($field = null){
+			$makeFieldStr = "";
+			if(!empty($field)){
+				foreach($this->columns as $name => $volumes){
+					foreach($volumes as $volume){
+						if($name == 'type')
+							break;
+						foreach($field as $f){
+							if($volume == $f){
+								if($makeFieldStr == ""){
+									$makeFieldStr = $f;
+								}else{
+									$makeFieldStr .= "," . $f;
+								}
+							}
+						}
+					}
+				}
+				return $makeFieldStr;
+			}
+			return '*';
+		}
+		protected function makeWhere($conditions){
 		}
 
 }
