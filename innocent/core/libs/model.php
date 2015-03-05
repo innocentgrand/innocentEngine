@@ -1,17 +1,19 @@
 <?php 
 class Model extends Core {
 		
-		const CONDITION_SIMPLE = 1;
-		const CONDITION_LITTLE_VERY = 2;
-		const CONDITION_MIDDLE_VERY = 3;
-		const CONDITION_ULTRA_VERY = 4;
-		const CONDITION_OBSCURITY = 5;
+		const CONDITION_SIMPLE = 2;
+		const CONDITION_LITTLE_VERY = 3;
+		const CONDITION_MIDDLE_VERY = 4;
+		const CONDITION_ULTRA_VERY = 5;
+		const CONDITION_OBSCURITY = 6;
 
 		protected $dbObject;
 
 		protected $table;
 		
 		protected $columns;
+		
+		protected $stmtObject;
 
 		public function __construct($dbsetting){
 				if(strtolower($dbsetting['dbkind']) == "mysql") {
@@ -78,12 +80,17 @@ TEXT;
 					} else {
 						$fieldData = null;
 					}
+					if(!empty($option['conditions'])){
+						$conditionData = $option['conditions'];
+					} else {
+						$conditionData = null;
+					}
 					switch($kind){
 						case 'first':
 							$field = $this->makeFields($fieldData);
 							$sql .= $field;
 							$sql .= " FROM {$this->table} ";
-							pr($sql);
+							$where = $this->makeWhere($conditionData);
 							$stn = $this->dbObject->prepare($sql);
 							break;
 						case 'all':
@@ -94,11 +101,19 @@ TEXT;
 							$field = "({$field}) AS counter";
 							break;
 					}
-					pr($field);
 				
 				} catch(PDOException $ex){
 					throw $ex;
 				}
+		}
+		
+		protected function setParams($conditions = null){
+			if(!empty($conditions)){
+				if(count($conditions) == self::CONDITION_SIMPLE){
+					foreach($conditions as $name => $val){
+					}
+				}
+			}
 		}
 
 		protected function makeFields($field = null){
@@ -123,7 +138,22 @@ TEXT;
 			}
 			return '*';
 		}
-		protected function makeWhere($conditions){
+		protected function makeWhere($conditions = null){
+			$where = "";
+			if(!empty($conditions)){
+				if(count($conditions) == self::CONDITION_SIMPLE) {
+					foreach($conditions as $name => $val){
+						if($where == ""){
+							$where .= ":{$name}";
+						} 
+						else {
+							$where .= " AND ";
+							$where .= " :{$name}";
+						}
+					}	
+				} 
+			}
+			return $where;
 		}
 
 }
