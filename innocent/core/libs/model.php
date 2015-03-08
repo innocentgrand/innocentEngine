@@ -1,11 +1,11 @@
 <?php 
 class Model extends Core {
 		
-		const CONDITION_SIMPLE = 2;
-		const CONDITION_LITTLE_VERY = 3;
-		const CONDITION_MIDDLE_VERY = 4;
-		const CONDITION_ULTRA_VERY = 5;
-		const CONDITION_OBSCURITY = 6;
+		const CONDITION_SIMPLE = 1;
+		const CONDITION_LITTLE_VERY = 2;
+		const CONDITION_MIDDLE_VERY = 3;
+		const CONDITION_ULTRA_VERY = 4;
+		const CONDITION_OBSCURITY = 5;
 
 		protected $dbObject;
 
@@ -14,6 +14,8 @@ class Model extends Core {
 		protected $columns;
 		
 		protected $stmtObject;
+
+		protected $whereDatas;
 
 		public function __construct($dbsetting){
 				if(strtolower($dbsetting['dbkind']) == "mysql") {
@@ -44,14 +46,14 @@ TEXT;
 			$stmt = $this->dbObject->query("SELECT * FROM {$this->table} LIMIT 0");
 			$i = 0;
 			while($column = $stmt->getColumnMeta($i++)){
-				$this->columns["name"][$i] = $column["name"];
-				$this->columns["type"][$i] = $column["native_type"];
+				$this->columns[$i]["name"] = $column["name"];
+				$this->columns[$i]["type"] = $column["native_type"];
 				switch($column["native_type"]){
 					case 'LONGLONG':
-						$this->columns["type"][$i] = PDO::PARAM_INT;
+						$this->columns[$i]["type"] = PDO::PARAM_INT;
 						break;
 					default:
-						$this->columns["type"][$i] = PDO::PARAM_STR;
+						$this->columns[$i]["type"] = PDO::PARAM_STR;
 						break;
 				}
 			}
@@ -91,7 +93,11 @@ TEXT;
 							$sql .= $field;
 							$sql .= " FROM {$this->table} ";
 							$where = $this->makeWhere($conditionData);
-							$stn = $this->dbObject->prepare($sql);
+							if($where != ""){
+								$sql .= " WHERE " .  $where;
+							}
+							$this->stmtObject = $this->dbObject->prepare($sql);
+							return $this->returnFirst($conditionData);
 							break;
 						case 'all':
 							$field = $this->makeFields($fieldData);
@@ -105,6 +111,19 @@ TEXT;
 				} catch(PDOException $ex){
 					throw $ex;
 				}
+		}
+
+		protected function returnFirst($conditions = null){
+			foreach($this->columns as $index => $value){
+				foreach($this->whereDatas as $key => $val){
+					if($value['name'] == $val){
+						$bindStr = ":" . $value['name'];
+						$this->stmtObject->bindParam($bindStr,$conditions[$value['name']],$value['type']);
+						$this->stmtObject->execute();
+						return $this->stmtObject->fetch();
+					}
+				}
+			}	
 		}
 		
 		protected function setParams($conditions = null){
@@ -141,14 +160,16 @@ TEXT;
 		protected function makeWhere($conditions = null){
 			$where = "";
 			if(!empty($conditions)){
-				if(count($conditions) == self::CONDITION_SIMPLE) {
+				if(array_depth($conditions) == self::CONDITION_SIMPLE) {
 					foreach($conditions as $name => $val){
 						if($where == ""){
 							$where .= ":{$name}";
+							$this->whereDatas[] = $name;
 						} 
 						else {
 							$where .= " AND ";
 							$where .= " :{$name}";
+							$this->whereDatas[] = $name;
 						}
 					}	
 				} 
