@@ -101,10 +101,26 @@ TEXT;
 							break;
 						case 'all':
 							$field = $this->makeFields($fieldData);
+							$sql .= $field;
+							$sql .= " FROM {$this->table} ";
+							$where = $this->makeWhere($conditionData);
+							if($where != ""){
+								$sql .= " WHERE " .  $where;
+							}
+							$this->stmtObject = $this->dbObject->prepare($sql);
+							return $this->returnAll($conditionData);
 							break;
 						case 'count':
-							$field = $this->makeFields($fieldData);
-							$field = "({$field}) AS counter";
+							//$field = $this->makeFields($fieldData);
+							$sql .= "COUNT(*) AS counter";
+							$sql .= " FROM {$this->table} ";
+							$where = $this->makeWhere($conditionData);
+							if($where != ""){
+								$sql .= " WHERE " .  $where;
+							}
+							$this->stmtObject = $this->dbObject->prepare($sql);
+							$data = $this->returnFirst($conditionData);
+							return (int)$data['counter'];
 							break;
 					}
 				
@@ -121,6 +137,22 @@ TEXT;
 						$this->stmtObject->bindParam($bindStr,$conditions[$value['name']],$value['type']);
 						$this->stmtObject->execute();
 						return $this->stmtObject->fetch();
+					}
+				}
+			}	
+		}
+
+		protected function returnAll($conditions = null){
+			pr($this->stmtObject);
+			foreach($this->columns as $index => $value){
+				foreach($this->whereDatas as $key => $val){
+					if($value['name'] == $val){
+						$bindStr = ":" . $value['name'];
+						pr($bindStr);
+						pr($conditions[$value['name']]);
+						$this->stmtObject->bindParam($bindStr,$conditions[$value['name']],$value['type']);
+						$this->stmtObject->execute();
+						return $this->stmtObject->fetchAll();
 					}
 				}
 			}	
@@ -163,12 +195,12 @@ TEXT;
 				if(array_depth($conditions) == self::CONDITION_SIMPLE) {
 					foreach($conditions as $name => $val){
 						if($where == ""){
-							$where .= ":{$name}";
+							$where .= "{$name} = :{$name}";
 							$this->whereDatas[] = $name;
 						} 
 						else {
 							$where .= " AND ";
-							$where .= " :{$name}";
+							$where .= " {$name} = :{$name}";
 							$this->whereDatas[] = $name;
 						}
 					}	

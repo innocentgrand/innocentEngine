@@ -1,7 +1,7 @@
 <?php
 class Controller extends Core {
 		
-		protected $_params;
+		protected $params;
 
 		protected $_server;
 
@@ -18,16 +18,20 @@ class Controller extends Core {
 		public $models;
 
 		protected $dbSetting;
+
+		protected $form;
 	
 		public function __construct(){
 				parent::__construct();
-				$this->_params = array(
+				$this->params = array(
 							'get' => $_GET,
 							'post' => $_POST,
 					);
 				$this->_server = $_SERVER;
 				$this->_files = $_FILES;
 				$this->Session = new SessionClass();
+				$this->form = new Form();
+				pr($this->form);
 		}
 
 		public function startUp(){
