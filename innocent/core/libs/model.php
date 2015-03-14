@@ -148,8 +148,6 @@ TEXT;
 				foreach($this->whereDatas as $key => $val){
 					if($value['name'] == $val){
 						$bindStr = ":" . $value['name'];
-						pr($bindStr);
-						pr($conditions[$value['name']]);
 						$this->stmtObject->bindParam($bindStr,$conditions[$value['name']],$value['type']);
 						$this->stmtObject->execute();
 						return $this->stmtObject->fetchAll();

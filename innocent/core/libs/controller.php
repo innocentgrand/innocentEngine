@@ -31,7 +31,7 @@ class Controller extends Core {
 				$this->_files = $_FILES;
 				$this->Session = new SessionClass();
 				$this->form = new Form();
-				pr($this->form);
+				$this->form->dataSetter($this->params);
 		}
 
 		public function startUp(){
@@ -87,6 +87,8 @@ class Controller extends Core {
 
 		protected function tpl($mytpl = null) {
 
+				$this->assignData['form'] = $this->form;
+				
                 if(!empty($this->assignData)) {
                         extract($this->assignData, EXTR_SKIP);
                 }
