@@ -10,7 +10,9 @@ class Form extends core {
 				
 			}
 		}
-		
+		if($action == "/"){
+			$action = $_SERVER['REQUEST_URI'];
+		}	
 		return '<form name="'.$name.'" action="'.$action.'" method="'.$method.'"'.$option.' >';
 	}
 	
