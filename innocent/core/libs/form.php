@@ -7,7 +7,21 @@ class Form extends core {
 		$option = "";
 		if(!empty($opt)){
 			foreach($opt as $key => $value){
-				
+				switch($key){
+					case 'accept-charset':
+						$option .= ' accept-charset="' . $valu . '"'; 
+						break;
+					case 'enctype':
+						$option .= ' enctype="' . $valu . '"'; 
+						break;
+					case 'target':
+						$option .= ' target="' . $valu . '"'; 
+						break;
+					default:
+						$option .= ' '.$key.'="' . $value . '"';
+						break;	
+					
+				}	
 			}
 		}
 		if($action == "/"){
@@ -39,6 +53,9 @@ class Form extends core {
 					case 'maxlength':
 						$option .= ' maxlength="' . $value . '"';
 						break;
+					default:
+						$option .= ' '.$key.'="' . $value . '"';
+						break;	
 
 				}
 			}
@@ -72,6 +89,9 @@ class Form extends core {
 					case 'maxlength':
 						$option .= ' maxlength="' . $value . '"';
 						break;
+					default:
+						$option .= ' '.$key.'="' . $value . '"';
+						break;	
 
 				}
 			}
@@ -80,6 +100,29 @@ class Form extends core {
 		return '<input type="password" name="'.$name.'" '.$option.$setVal.' />';
 	}
 	
+	public function submit($name="submit",$value="submit",$opt=array()){
+		$option="";
+		if(!empty($opt)){
+			foreach($opt as $key => $value){
+				switch($key){
+					case 'formaction':
+						$option .= ' formaction="' . $valu . '"'; 
+						break;
+					case 'formenctype':
+						$option .= ' formenctype="' . $valu . '"'; 
+						break;
+					case 'formmethod':
+						$option .= ' formmethod="' . $valu . '"'; 
+						break;
+					default:
+						$option .= ' '.$key.'="' . $value . '"';
+						break;	
+				}	
+			}
+		}
+		return '<input type="submit" name="'.$name.'" value="'.$value.'"'.$option.' />';
+	}
+
 	public function dataSetter($data){
 		$this->_data = $data;
 	}	
