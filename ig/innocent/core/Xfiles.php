@@ -1,6 +1,7 @@
 <?php
 defined("DS") || define("DS", DIRECTORY_SEPARATOR);
 $rootDir = dirname(dirname(__FILE__));
+$appDir - dirname(dirname(__FILE__));
 //session_start();
 require_once($rootDir . DS . "autoloader.php");
 
