@@ -1,13 +1,13 @@
 <?php
 defined("DS") || define("DS", DIRECTORY_SEPARATOR);
 $rootDir = dirname(dirname(__FILE__));
-$appDir - dirname(dirname(__FILE__));
+$appDir = dirname(dirname(__FILE__));
 //session_start();
 require_once($rootDir . DS . "autoloader.php");
 
 ///BASIC Auth////////////////////////////////////////////////////
 
-BasicAuth("test","test");
+//BasicAuth("test","test");
 
 ///////////////////////////////////////////////////////////////
 
@@ -38,6 +38,9 @@ try{
 
 	$FWM->makeCObject();	
 	$x_object = $FWM->makeCObject();
+        if ($x_config->getDirPath()) {
+            $FWM->pathiIniLoader($x_config->getDirPath());
+        }
 	$x_object->tplPathsetter($FWM->getViewPath());
 	$x_object->logDirSetter($FWM->getLogDirPath());
 	$x_object->modelPathSetter($FWM->getModelPath());
@@ -66,4 +69,3 @@ function pr($data){
 		echo "</pre>";
 }
 
-?>

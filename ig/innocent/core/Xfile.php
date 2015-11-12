@@ -72,8 +72,7 @@ class XFile {
 		$x_parse_url = parse_url($this->x_request);
 		$x_exp_path = explode('/',$x_parse_url['path']);
 		$this->x_exp_path = $x_exp_path;
-
-		foreach($this->hierarchy as $hiKey => $hiValue){
+		foreach((array)$this->hierarchy as $hiKey => $hiValue){
 			if(!empty($x_exp_path[1])){
 				$tmpPath = "/" . $x_exp_path[1];
 			}
@@ -209,5 +208,9 @@ class XFile {
 	public function getSubClassName(){
 		return $this->subClassName;
 	}
+        
+        public function pathiIniLoader($d) {
+            pr($d);
+        }
 
 }
