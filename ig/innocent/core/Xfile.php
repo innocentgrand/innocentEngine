@@ -6,7 +6,7 @@ class XFile {
 	const DIRNAME_VIEW = "view";
 	const DIRNAME_LOG = "log";
 	const DIRNAME_CONFS = "confs";
-		
+	
 	private $x_path_root;
 	private $x_path_controller;
 	private $x_path_model;
@@ -15,6 +15,9 @@ class XFile {
 	private $x_path_confs;
 
         private $x_path_app_root;
+        private $x_path_app_controller;
+        private $x_path_app_model;
+        private $x_path_app_view;
         
 	private $x_config;
 
@@ -28,13 +31,7 @@ class XFile {
 
 	public function __construct($rootDir){
 		$this->x_path_root = $rootDir;
-		/*
-		$this->x_path_controller = $this->x_path_root . DS . 'controller' . DS;
-		$this->x_path_model = $this->x_path_root . DS . 'model' . DS;
-		$this->x_path_view = $this->x_path_root . DS . 'view' . DS;
-		$this->x_path_log = $this->x_path_root . DS . 'log' . DS;
-		$this->x_path_confs = $this->x_path_root . DS . 'confs' . DS;
-		 */
+		
 		$this->x_path_controller = $this->x_path_root . DS;
 		$this->x_path_model = $this->x_path_root . DS;
 		$this->x_path_view = $this->x_path_root . DS;
@@ -198,7 +195,21 @@ class XFile {
 	}
         
         public function pathiIniLoader($d) {
-            pr($d);
+            foreach ($d as $k => $v) {
+                foreach ($v as $setName => $setValue) {
+                    switch ($setName) {
+                        case "rootdir":
+                            $this->x_path_app_root = DS . $setValue;
+                            break;
+                        case "app":
+                            $this->x_path_app_root = $this->x_path_app_root . DS . $setValue;
+                            break;
+                        case "path":
+                            $this->x_path_app_root = $setValue . $this->x_path_app_root;
+                            break;
+                    }
+                }
+            }
         }
 
 }
