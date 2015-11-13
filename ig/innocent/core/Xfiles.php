@@ -25,10 +25,10 @@ try{
 	$x_config = new CONFIG($x_path_confs);
 
 	if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ){
-			$protocol = "https://";
+            $protocol = "https://";
 	} 
 	else {
-			$protocol = "http://";
+            $protocol = "http://";
 	}
 	$x_request = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 

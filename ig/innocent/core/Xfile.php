@@ -14,6 +14,8 @@ class XFile {
 	private $x_path_log;
 	private $x_path_confs;
 
+        private $x_path_app_root;
+        
 	private $x_config;
 
 	private $x_protcol;
@@ -40,21 +42,7 @@ class XFile {
 		$this->x_path_confs = $this->x_path_root . DS . self::DIRNAME_CONFS .DS;
 		
 		try{
-			$this->x_config = new CONFIG($this->x_path_confs);
-			$tmpAlias = $this->x_config->getAlias();
-			if(!empty($tmpAlias)){
-				$i = 0;
-				foreach($tmpAlias as $alias => $value){
-					$this->hierarchy[$i]["alias"] = $alias;
-					if(!empty($value)){
-							$this->hierarchy[$i]["hi"] = $value;
-					}
-					else {
-							$this->hierarchy[$i]["hi"] = null;
-					}
-					$i++;
-				}
-			}
+		
 
 		}catch(Exception $ex){
 			throw($ex);
