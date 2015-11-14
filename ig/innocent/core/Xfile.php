@@ -51,6 +51,7 @@ class XFile {
             $this->x_path_controller = $this->x_path_root;
             $this->x_path_model = $this->x_path_root;
             $this->x_path_view = $this->x_path_root;
+            $this->x_path_confs = $this->x_path_root . self::DIRNAME_CONFS .DS;
         }
 
 	public function request($req){

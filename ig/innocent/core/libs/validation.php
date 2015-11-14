@@ -6,4 +6,7 @@ class Validation extends Core {
     public function __construct($rule){
         
     }
+    
+    
+    
 }

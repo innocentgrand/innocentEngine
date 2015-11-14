@@ -54,16 +54,16 @@ class Controller extends Core {
     }
 
     public function tplPathsetter($path){
-            if(!is_dir($path)){
-                    throw new Exception("not tpl path");
-            }
+        if(!is_dir($path)){
+            throw new Exception("not tpl path");
+        }
 
-            $this->tplPath = $path;
+        $this->tplPath = $path;
 
     }
 
     public function modelPathSetter($path){
-                    $this->modelPath = $path;
+        $this->modelPath = $path;
     }
 
     public function dbDataSetter($data){
@@ -90,7 +90,7 @@ class Controller extends Core {
         $this->assignData['form'] = $this->form;
 
         if(!empty($this->assignData)) {
-                extract($this->assignData, EXTR_SKIP);
+            extract($this->assignData, EXTR_SKIP);
         }
 
         $backtraces = debug_backtrace();
@@ -102,7 +102,7 @@ class Controller extends Core {
         $filename = strtolower($filename);
 
         if(!file_exists($this->tplPath . DS . $filename . ".html")){
-                        throw new Exception("not tpl file");
+            throw new Exception("not tpl file");
         }
         require( $this->tplPath . DS . $filename . ".html");
     }
