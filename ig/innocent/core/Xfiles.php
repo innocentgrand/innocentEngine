@@ -36,11 +36,11 @@ try{
 
 	$x_parse_url = parse_url($x_request);
 
-	$FWM->makeCObject();	
-	$x_object = $FWM->makeCObject();
         if ($x_config->getDirPath()) {
             $FWM->pathiIniLoader($x_config->getDirPath());
+            $FWM->resetDirPath();
         }
+	$x_object = $FWM->makeCObject();
 	$x_object->tplPathsetter($FWM->getViewPath());
 	$x_object->logDirSetter($FWM->getLogDirPath());
 	$x_object->modelPathSetter($FWM->getModelPath());

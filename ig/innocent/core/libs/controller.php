@@ -35,22 +35,22 @@ class Controller extends Core {
 		}
 
 		public function startUp(){
-				$this->modelLoader();
+                    $this->modelLoader();
 		}
 
 
 		protected function modelLoader(){
-				if(!empty($this->models)){
-						foreach($this->models as $model){
-								$modelfile = $this->modelPath. ucfirst($model) . ".php";
-								if(!file_exists($modelfile)){
-									throw new Exception("not model file.");
-								}
-								require_once($modelfile);
-								$tmpModelName = ucfirst($model);
-								$this->{$tmpModelName} =  new $tmpModelName($this->dbSetting['DB']);
-						}
-				}
+                    if(!empty($this->models)){
+                        foreach($this->models as $model){
+                            $modelfile = $this->modelPath. ucfirst($model) . ".php";
+                            if(!file_exists($modelfile)){
+                                    throw new Exception("not model file.");
+                            }
+                            require_once($modelfile);
+                            $tmpModelName = ucfirst($model);
+                            $this->{$tmpModelName} =  new $tmpModelName($this->dbSetting['DB']);
+                        }
+                    }
 		}
 
 		public function tplPathsetter($path){
@@ -87,29 +87,29 @@ class Controller extends Core {
 
 		protected function tpl($mytpl = null) {
 
-				$this->assignData['form'] = $this->form;
+                    $this->assignData['form'] = $this->form;
 				
-                if(!empty($this->assignData)) {
-                        extract($this->assignData, EXTR_SKIP);
-                }
+                    if(!empty($this->assignData)) {
+                            extract($this->assignData, EXTR_SKIP);
+                    }
 
-                $backtraces = debug_backtrace();
-                $filename = $backtraces[1]['function'];
+                    $backtraces = debug_backtrace();
+                    $filename = $backtraces[1]['function'];
 
-                if(!empty($mytpl)) {
+                    if(!empty($mytpl)) {
                         $filename = $mytpl;
-				}
-				$filename = strtolower($filename);
+                    }
+                    $filename = strtolower($filename);
 
-				if(!file_exists($this->tplPath . DS . $filename . ".html")){
-						throw new Exception("not tpl file");
-				}
-				require( $this->tplPath . DS . $filename . ".html");
+                    if(!file_exists($this->tplPath . DS . $filename . ".html")){
+                                    throw new Exception("not tpl file");
+                    }
+                    require( $this->tplPath . DS . $filename . ".html");
 		}
 
 		public function h($str){
-                return htmlspecialchars($str, ENT_QUOTES);
-        }
+                    return htmlspecialchars($str, ENT_QUOTES);
+                }
 		
 		public function shutDown(){
 			
