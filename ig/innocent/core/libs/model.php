@@ -16,11 +16,13 @@ class Model extends Core {
 		protected $stmtObject;
 
 		protected $whereDatas;
+                
+                protected $validation;
 
 		public function __construct($dbsetting){
-				if(strtolower($dbsetting['dbkind']) == "mysql") {
-					//MySql
-						$dsn = <<<TEXT
+                    if(strtolower($dbsetting['dbkind']) == "mysql") {
+                            //MySql
+                                    $dsn = <<<TEXT
 mysql:host={$dbsetting['host']};dbname={$dbsetting['db']};charset=utf8
 TEXT;
 					$this->makeDbObject($dsn,$dbsetting['user'],$dbsetting['passwd']);		
@@ -60,17 +62,17 @@ TEXT;
 		}
 
 		protected function makeDbObject($dsn,$uid,$upass,$charset="utf8"){
-				try{
-					$this->dbObject = new PDO($dsn,$uid,$upass);
-						$stmt = $this->dbObject->prepare("SET NAMES :charset");
+                    try{
+                        $this->dbObject = new PDO($dsn,$uid,$upass);
+                        $stmt = $this->dbObject->prepare("SET NAMES :charset");
 
-						$stmt->bindValue(":charset", $charset, PDO::PARAM_STR);
-						
-						$this->dbObject->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                        $stmt->bindValue(":charset", $charset, PDO::PARAM_STR);
 
-				} catch(PDOException $ex){
-					throw $ex;
-				}
+                        $this->dbObject->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+                    } catch(PDOException $ex){
+                            throw $ex;
+                    }
 		}
 
 		public function find($kind, $option = array()){
