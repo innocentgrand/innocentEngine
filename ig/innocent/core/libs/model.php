@@ -19,7 +19,8 @@ class Model extends Core {
 
     protected $validation;
 
-    public function __construct($dbsetting){
+    public function __construct($dbsetting, $setting = null){
+        
         if(strtolower($dbsetting['dbkind']) == "mysql") {
                 //MySql
             $dsn = <<<TEXT

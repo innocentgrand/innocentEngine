@@ -27,7 +27,7 @@ class CONFIG extends Core {
             if(file_exists($serverDirPath)) {
                 $this->dirPathData = parse_ini_file($serverDirPath, true);
             }
-            $settingDirPath - $path . "setting.ini";
+            $settingDirPath = $path . "setting.ini";
             if(file_exists($serverDirPath)) {
                 $this->dirPathData = parse_ini_file($serverDirPath, true);
             }

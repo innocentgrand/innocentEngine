@@ -48,7 +48,7 @@ class Controller extends Core {
                 }
                 require_once($modelfile);
                 $tmpModelName = ucfirst($model);
-                $this->{$tmpModelName} =  new $tmpModelName($this->dbSetting['DB']);
+                $this->{$tmpModelName} =  new $tmpModelName($this->dbSetting);
             }
         }
     }
