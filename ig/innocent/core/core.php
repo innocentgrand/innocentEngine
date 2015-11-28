@@ -1,6 +1,6 @@
 <?php 
 class Core {
-
+        
         protected $logDir;
 
         protected function __construct(){

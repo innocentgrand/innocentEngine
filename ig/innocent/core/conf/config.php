@@ -1,6 +1,8 @@
 <?php 
 class CONFIG extends Core {
 
+    protected $setting;
+    
     protected $dbSetting;
 
     protected $hierarchy;
@@ -11,28 +13,34 @@ class CONFIG extends Core {
 
     public function __construct($path){
             parent::__construct();
+            $settingDirPath = $path . "setting.ini";
+            if(file_exists($settingDirPath)) {
+                $this->setting = parse_ini_file($settingDirPath, true);
+            }
             $dbINI = $path . "db.ini";
             if(file_exists($dbINI)){
                 $this->dbSetting = parse_ini_file($dbINI,true);
+                $this->dbSettingFairing();
              }
-            /*$hiINI = $path . "hi.ini";
-            if(file_exists($hiINI)){
-                            $this->hierarchy = parse_ini_file($hiINI,true);
-            }*/
-            /*$aliasINI = $path . "alias.ini";
-            if(file_exists($aliasINI)){
-                $this->aliasdata = parse_ini_file($aliasINI,true);	
-            }*/
+            
             $serverDirPath = $path . "set_path.ini";
             if(file_exists($serverDirPath)) {
                 $this->dirPathData = parse_ini_file($serverDirPath, true);
             }
-            $settingDirPath = $path . "setting.ini";
-            if(file_exists($serverDirPath)) {
-                $this->dirPathData = parse_ini_file($serverDirPath, true);
-            }
+            
     }
-
+    
+    private function dbSettingFairing() {
+        foreach ($this->dbSetting as $k => $sett) {
+            pr($k);
+            pr($sett);
+        }
+    }
+    
+    public function getSetting(){
+        return $this->setting;
+    }
+    
     public function defaulDbGetter(){
             return $this->dbSetting;
     }

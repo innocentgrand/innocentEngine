@@ -11,6 +11,13 @@ require_once($rootDir . DS . "autoloader.php");
 
 ///////////////////////////////////////////////////////////////
 
+set_error_handler(function ($no, $msg, $file, $line) {
+    if (error_reporting()) {
+        throw new ErrorException($msg, 0, $no, $file, $line);
+    }
+});
+
+
 $x_path_root = $rootDir;
 $x_path_controller = $x_path_root . DS . "controller" . DS;
 $x_path_modl = $x_path_root . DS . "model" . DS;
@@ -23,6 +30,21 @@ try{
 	$FWM = new XFile($x_path_root);
 	
 	$x_config = new CONFIG($x_path_confs);
+        
+        $xmode = $x_config->getSetting();
+        
+        if($xmode) {
+            if ($mode['SETTING']) {
+                if ($mode['SETTING']['MODE']) {
+                    if($mode['SETTING']['MODE'] == XFile::MODE_SET_DEBUG) {
+                        error_reporting(-1);
+                    }
+                    else {
+                        error_reporting(0);
+                    }
+                }
+            }
+        }
 
 	if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ){
             $protocol = "https://";
@@ -61,7 +83,7 @@ TEXT;
 
 	$x_object->shutDown();
 } catch (Exception $ex){
-	echo nl2br($ex->getMessage());
+    echo $ex->getMessage();
 }
 function pr($data){
 		echo "<pre>";
