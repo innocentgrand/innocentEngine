@@ -27,4 +27,18 @@ class SessionClass extends core {
 		session_write_close();
 		return $r;
 	}
+        
+        public function del($key) {
+            session_start();
+            if(!empty($_SESSION[$key])){
+                unset($_SESSION[$key]);
+            }
+            session_write_close();
+        }
+        
+        public function destroy() {
+            session_start();
+            $r = session_destroy();
+            session_write_close();
+        }
 }

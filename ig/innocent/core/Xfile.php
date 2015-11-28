@@ -7,9 +7,6 @@ class XFile {
 	const DIRNAME_LOG = "log";
 	const DIRNAME_CONFS = "confs";
         
-        const MODE_SET_DEBUG = "DEBUG";
-        const MODE_MODE_NORMAL = "NORMAL";
-
 	
 	private $x_path_root;
 	private $x_path_controller;

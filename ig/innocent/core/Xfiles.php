@@ -11,12 +11,6 @@ require_once($rootDir . DS . "autoloader.php");
 
 ///////////////////////////////////////////////////////////////
 
-set_error_handler(function ($no, $msg, $file, $line) {
-    if (error_reporting()) {
-        throw new ErrorException($msg, 0, $no, $file, $line);
-    }
-});
-
 
 $x_path_root = $rootDir;
 $x_path_controller = $x_path_root . DS . "controller" . DS;
@@ -34,9 +28,9 @@ try{
         $xmode = $x_config->getSetting();
         
         if($xmode) {
-            if ($mode['SETTING']) {
-                if ($mode['SETTING']['MODE']) {
-                    if($mode['SETTING']['MODE'] == XFile::MODE_SET_DEBUG) {
+            if ($xmode['SETTING']) {
+                if ($xmode['SETTING']['MODE']) {
+                    if($xmode['SETTING']['MODE'] == CONFIG::MODE_SET_DEBUG) {
                         error_reporting(-1);
                     }
                     else {

@@ -1,6 +1,10 @@
 <?php 
 class CONFIG extends Core {
 
+    const MODE_SET_DEBUG = "DEBUG";
+    const MODE_MODE_NORMAL = "NORMAL";
+
+    
     protected $setting;
     
     protected $dbSetting;
@@ -11,6 +15,8 @@ class CONFIG extends Core {
 
     protected $dirPathData;
 
+    protected $mode;
+    
     public function __construct($path){
             parent::__construct();
             $settingDirPath = $path . "setting.ini";
@@ -30,11 +36,34 @@ class CONFIG extends Core {
             
     }
     
+    
+    public function setMode($mode) {
+        $this->mode = $mode;
+    }
+    
     private function dbSettingFairing() {
-        foreach ($this->dbSetting as $k => $sett) {
-            pr($k);
-            pr($sett);
+        $tmp = array();
+        $mode = $this->getSetting();
+        if($mode) {
+            if ($mode['SETTING']) {
+                if ($mode['SETTING']['MODE']) {
+                    if($mode['SETTING']['MODE'] == self::MODE_SET_DEBUG) {
+                        $prefix = self::MODE_SET_DEBUG;
+                    }
+                    else {
+                        $prefix = self::MODE_MODE_NORMAL;
+                    }
+                }
+            }
         }
+        foreach ($this->dbSetting as $k => $sett) {
+            if(strpos($k, $prefix) !== false){
+                pr($k);
+                pr($sett);
+                $tmp[$k] = $sett;
+            }
+        }
+        pr($tmp);
     }
     
     public function getSetting(){
@@ -55,6 +84,10 @@ class CONFIG extends Core {
 
     public function getDirPath() {
         return $this->dirPathData;
+    }
+    
+    public function getMode() {
+        
     }
 
 }
