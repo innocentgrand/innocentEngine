@@ -19,21 +19,24 @@ class Model extends Core {
 
     protected $validation;
 
+    protected $dbconStrArray;
+    
     public function __construct($dbsetting, $setting = null){
         
-        if(strtolower($dbsetting['dbkind']) == "mysql") {
-                //MySql
-            $dsn = <<<TEXT
-mysql:host={$dbsetting['host']};dbname={$dbsetting['db']};charset=utf8
+        $i = 0;
+        foreach ($dbsetting as $key => $val) {
+            $dsn[$key] = <<<TEXT
+mysql:host={$val['host']};dbname={$val['db']};charset=utf8
 TEXT;
-            $this->makeDbObject($dsn,$dbsetting['user'],$dbsetting['passwd']);		
+            $dsn2[$i] = <<<TEXT
+mysql:host={$val['host']};dbname={$val['db']};charset=utf8
+TEXT;
+            $i++;
+            
         }
-        else if(strtolower($dbsetting['dbkind']) == "pgsql") {
-            //Postgresql
-        }
-        else if(strtolower($dbsetting['dbkind']) == "sqlsrv") {
-            //SQLServer
-        }
+        
+        $this->makeDbObject($dsn,$dbsetting['user'],$dbsetting['passwd']);		
+        
 
         $this->table = strtolower(get_class($this));
 

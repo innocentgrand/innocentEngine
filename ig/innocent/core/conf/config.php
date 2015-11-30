@@ -58,12 +58,10 @@ class CONFIG extends Core {
         }
         foreach ($this->dbSetting as $k => $sett) {
             if(strpos($k, $prefix) !== false){
-                pr($k);
-                pr($sett);
                 $tmp[$k] = $sett;
             }
         }
-        pr($tmp);
+        $this->dbSetting = $tmp;
     }
     
     public function getSetting(){
