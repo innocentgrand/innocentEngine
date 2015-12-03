@@ -20,7 +20,8 @@ class Controller extends Core {
     protected $dbSetting;
 
     protected $form;
-   
+
+    protected $modelVarious;
 
     public function __construct(){
         parent::__construct();
@@ -49,10 +50,15 @@ class Controller extends Core {
                 }
                 require_once($modelfile);
                 $tmpModelName = ucfirst($model);
-                $this->{$tmpModelName} =  new $tmpModelName($this->dbSetting);
-                if (is_array($model)) {
-                    pr($model);
+                if (is_array($this->modelVarious)) {
+                    foreach ($this->modelVarious as $model => $db) {
+                        if ($tmpModelName == $model) {
+                            $this->{$tmpModelName} =  new $tmpModelName($this->dbSetting, $db);
+                        }
+                    }
                 }
+                
+                
             }
         }
     }

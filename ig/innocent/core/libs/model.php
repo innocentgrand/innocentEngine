@@ -21,7 +21,7 @@ class Model extends Core {
 
     protected $dbconStrArray;
     
-    public function __construct($dbsetting, $setting = null){
+    public function __construct($dbsetting, $DBkey = null, $setting = null){
         
         $i = 0;
         foreach ($dbsetting as $key => $val) {
@@ -31,13 +31,19 @@ TEXT;
             $dsn2[$i] = <<<TEXT
 mysql:host={$val['host']};dbname={$val['db']};charset=utf8
 TEXT;
-            $i++;
-            
+
+            $user[$key] = $val['user'];
+            $pass[$key] = $val['passwd'];
+            $user[$i] = $val['user'];
+            $pass[$i] = $val['passwd'];
+            $i++;            
         }
         
-        $this->makeDbObject($dsn,$dbsetting['user'],$dbsetting['passwd']);		
-        
-
+        if ($DBkey) {
+            $this->makeDbObject($dsn,$user[0],$pass[0]);		
+        } else {
+            $this->makeDbObject($dsn,$user[$DBkey],$dbsetting[$DBkey]);
+        }
         $this->table = strtolower(get_class($this));
 
         $this->getColumn();
