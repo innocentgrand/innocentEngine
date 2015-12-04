@@ -25,20 +25,23 @@ try{
 	
 	$x_config = new CONFIG($x_path_confs);
         
-        $xmode = $x_config->getSetting();
-        
-        if($xmode) {
-            if ($xmode['SETTING']) {
-                if ($xmode['SETTING']['MODE']) {
-                    if($xmode['SETTING']['MODE'] == CONFIG::MODE_SET_DEBUG) {
-                        error_reporting(-1);
-                    }
-                    else {
-                        error_reporting(0);
-                    }
-                }
-            }
-        }
+	$xmode = $x_config->getSetting();
+
+	$x_prefix = "";
+
+	if($xmode) {
+		if ($xmode['SETTING']) {
+			if ($xmode['SETTING']['MODE']) {
+				if($xmode['SETTING']['MODE'] == CONFIG::MODE_SET_DEBUG) {
+					error_reporting(-1);
+				}
+				else {
+					error_reporting(0);
+				}
+				$x_prefix = $xmode['SETTING']['MODE'];
+			}
+		}
+	}
 
 	if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ){
             $protocol = "https://";
@@ -59,6 +62,7 @@ try{
 	$x_object = $FWM->makeCObject();
 	$x_object->tplPathsetter($FWM->getViewPath());
 	$x_object->logDirSetter($FWM->getLogDirPath());
+	$x_object->setPrefix($x_prefix);
 	$x_object->modelPathSetter($FWM->getModelPath());
 	$x_object->dbDataSetter($x_config->defaulDbGetter());
 	$x_object->startUp();

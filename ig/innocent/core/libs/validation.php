@@ -3,7 +3,7 @@ class Validation extends Core {
     
     protected $rule;
     
-    public function __construct($rule){
+    public function __construct($rule=null){
         
     }
     

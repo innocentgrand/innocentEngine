@@ -15,10 +15,10 @@ class XFile {
 	private $x_path_log;
 	private $x_path_confs;
 
-        private $x_path_app_root;
-        private $x_path_app_controller;
-        private $x_path_app_model;
-        private $x_path_app_view;
+    private $x_path_app_root;
+    private $x_path_app_controller;
+    private $x_path_app_model;
+    private $x_path_app_view;
         
 	private $x_config;
 

@@ -23,6 +23,8 @@ class Controller extends Core {
 
     protected $modelVarious;
 
+    private $prefix;
+
     public function __construct(){
         parent::__construct();
         $this->params = array(
@@ -42,23 +44,25 @@ class Controller extends Core {
 
 
     protected function modelLoader(){
-        if(!empty($this->models)){
-            foreach($this->models as $model){
-                $modelfile = $this->modelPath. ucfirst($model) . ".php";
-                if(!file_exists($modelfile)){
-                        throw new Exception("not model file.");
+        if(!empty($this->models)) {
+            foreach ($this->models as $model) {
+                $modelfile = $this->modelPath . ucfirst($model) . ".php";
+                if (!file_exists($modelfile)) {
+                    throw new Exception("not model file.");
                 }
                 require_once($modelfile);
                 $tmpModelName = ucfirst($model);
                 if (is_array($this->modelVarious)) {
                     foreach ($this->modelVarious as $model => $db) {
-                        if ($tmpModelName == $model) {
-                            $this->{$tmpModelName} =  new $tmpModelName($this->dbSetting, $db);
+                        if ($tmpModelName == ucfirst($model)) {
+                            $this->{$tmpModelName} = new $tmpModelName($this->dbSetting, $db, $this->prefix);
                         }
                     }
+                } else {
+                    $this->{$tmpModelName} = new $tmpModelName($this->dbSetting);
                 }
-                
-                
+
+
             }
         }
     }
@@ -121,6 +125,10 @@ class Controller extends Core {
         return htmlspecialchars($str, ENT_QUOTES);
     }
 
+    public function setPrefix($prefix) {
+        $this->prefix = $prefix;
+    }
+
     public function shutDown(){
 
     }
@@ -128,5 +136,6 @@ class Controller extends Core {
     public function __destruct(){
                     parent::__destruct();
     }
+
 
 }

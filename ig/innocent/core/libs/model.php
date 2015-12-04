@@ -20,11 +20,13 @@ class Model extends Core {
     protected $validation;
 
     protected $dbconStrArray;
+
+	private $dbKeyPrefix;
     
-    public function __construct($dbsetting, $DBkey = null, $setting = null){
+    public function __construct($dbsetting, $DBkey = null, $prefix = null){
         
         $i = 0;
-        foreach ($dbsetting as $key => $val) {
+        foreach ((array)$dbsetting as $key => $val) {
             $dsn[$key] = <<<TEXT
 mysql:host={$val['host']};dbname={$val['db']};charset=utf8
 TEXT;
@@ -36,19 +38,30 @@ TEXT;
             $pass[$key] = $val['passwd'];
             $user[$i] = $val['user'];
             $pass[$i] = $val['passwd'];
-            $i++;            
+            $i++;
         }
-        
-        if ($DBkey) {
-            $this->makeDbObject($dsn,$user[0],$pass[0]);		
-        } else {
-            $this->makeDbObject($dsn,$user[$DBkey],$dbsetting[$DBkey]);
-        }
-        $this->table = strtolower(get_class($this));
 
-        $this->getColumn();
 
-        $this->startUp();
+		try {
+			if (empty($DBkey)) {
+				$this->makeDbObject($dsn[0], $user[0], $pass[0]);
+			} else {
+				if ($prefix) {
+					$DBkey .= "_" . $prefix;
+					$this->dbKeyPrefix = $prefix;
+				}
+				$this->makeDbObject($dsn[$DBkey], $user[$DBkey], $pass[$DBkey]);
+			}
+			$this->table = strtolower(get_class($this));
+
+			$this->getColumn();
+
+			$this->validation = new Validation();
+
+			$this->startUp();
+		}catch (Exception $ex) {
+			throw $ex;
+		}
     }
 
     protected function startUp(){
@@ -73,6 +86,7 @@ TEXT;
 
     protected function makeDbObject($dsn,$uid,$upass,$charset="utf8"){
         try{
+			pr($upass);
             $this->dbObject = new PDO($dsn,$uid,$upass);
             $stmt = $this->dbObject->prepare("SET NAMES :charset");
 
@@ -80,65 +94,67 @@ TEXT;
 
             $this->dbObject->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-        } catch(PDOException $ex){
-                throw $ex;
-        }
+        } catch(PDOException $ex) {
+			throw $ex;
+		} catch(Exception $ex) {
+			throw $ex;
+		}
     }
 
     public function find($kind, $option = array()){
-                    try{
+			try{
 
-                            $sql = "SELECT ";
-                            if(!empty($option['fields'])){
-                                    $fieldData = $option['fields'];
-                            } else {
-                                    $fieldData = null;
-                            }
-                            if(!empty($option['conditions'])){
-                                    $conditionData = $option['conditions'];
-                            } else {
-                                    $conditionData = null;
-                            }
-                            switch($kind){
-                                    case 'first':
-                                            $field = $this->makeFields($fieldData);
-                                            $sql .= $field;
-                                            $sql .= " FROM {$this->table} ";
-                                            $where = $this->makeWhere($conditionData);
-                                            if($where != ""){
-                                                    $sql .= " WHERE " .  $where;
-                                            }
-                                            $this->stmtObject = $this->dbObject->prepare($sql);
-                                            return $this->returnFirst($conditionData);
-                                            break;
-                                    case 'all':
-                                            $field = $this->makeFields($fieldData);
-                                            $sql .= $field;
-                                            $sql .= " FROM {$this->table} ";
-                                            $where = $this->makeWhere($conditionData);
-                                            if($where != ""){
-                                                    $sql .= " WHERE " .  $where;
-                                            }
-                                            $this->stmtObject = $this->dbObject->prepare($sql);
-                                            return $this->returnAll($conditionData);
-                                            break;
-                                    case 'count':
-                                            //$field = $this->makeFields($fieldData);
-                                            $sql .= "COUNT(*) AS counter";
-                                            $sql .= " FROM {$this->table} ";
-                                            $where = $this->makeWhere($conditionData);
-                                            if($where != ""){
-                                                    $sql .= " WHERE " .  $where;
-                                            }
-                                            $this->stmtObject = $this->dbObject->prepare($sql);
-                                            $data = $this->returnFirst($conditionData);
-                                            return (int)$data['counter'];
-                                            break;
-                            }
+					$sql = "SELECT ";
+					if(!empty($option['fields'])){
+							$fieldData = $option['fields'];
+					} else {
+							$fieldData = null;
+					}
+					if(!empty($option['conditions'])){
+							$conditionData = $option['conditions'];
+					} else {
+							$conditionData = null;
+					}
+					switch($kind){
+							case 'first':
+									$field = $this->makeFields($fieldData);
+									$sql .= $field;
+									$sql .= " FROM {$this->table} ";
+									$where = $this->makeWhere($conditionData);
+									if($where != ""){
+											$sql .= " WHERE " .  $where;
+									}
+									$this->stmtObject = $this->dbObject->prepare($sql);
+									return $this->returnFirst($conditionData);
+									break;
+							case 'all':
+									$field = $this->makeFields($fieldData);
+									$sql .= $field;
+									$sql .= " FROM {$this->table} ";
+									$where = $this->makeWhere($conditionData);
+									if($where != ""){
+											$sql .= " WHERE " .  $where;
+									}
+									$this->stmtObject = $this->dbObject->prepare($sql);
+									return $this->returnAll($conditionData);
+									break;
+							case 'count':
+									//$field = $this->makeFields($fieldData);
+									$sql .= "COUNT(*) AS counter";
+									$sql .= " FROM {$this->table} ";
+									$where = $this->makeWhere($conditionData);
+									if($where != ""){
+											$sql .= " WHERE " .  $where;
+									}
+									$this->stmtObject = $this->dbObject->prepare($sql);
+									$data = $this->returnFirst($conditionData);
+									return (int)$data['counter'];
+									break;
+					}
 
-                    } catch(PDOException $ex){
-                            throw $ex;
-                    }
+			} catch(PDOException $ex){
+					throw $ex;
+			}
     }
 
     protected function returnFirst($conditions = null){
