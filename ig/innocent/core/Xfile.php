@@ -6,8 +6,6 @@ class XFile {
 	const DIRNAME_VIEW = "view";
 	const DIRNAME_LOG = "log";
 	const DIRNAME_CONFS = "confs";
-	const DIRNAME_PARTS = "parts";
-        
 	
 	private $x_path_root;
 	private $x_path_controller;
@@ -33,7 +31,6 @@ class XFile {
 
 	private $x_path_parts;
 
-	private $x_path_parts_view;
 
 	public function __construct($rootDir){
             $this->x_path_root = $rootDir;
@@ -43,9 +40,6 @@ class XFile {
             $this->x_path_view = $this->x_path_root . DS;
             $this->x_path_log = $this->x_path_root . DS . self::DIRNAME_LOG . DS;
             $this->x_path_confs = $this->x_path_root . DS . self::DIRNAME_CONFS .DS;
-			$this->x_path_parts = $this->x_path_controller . self::DIRNAME_PARTS . DS;
-
-			$this->x_path_parts_view = $this->x_path_root . DS . Self::DIRNAME_VIEW . DS . self::DIRNAME_PARTS . DS;
 
             try{
 
@@ -60,9 +54,7 @@ class XFile {
             $this->x_path_controller = $this->x_path_root;
             $this->x_path_model = $this->x_path_root;
             $this->x_path_view = $this->x_path_root;
-			$this->x_path_parts = $this->x_path_root . DS . self::DIRNAME_CONT . DS . self::DIRNAME_PARTS  . DS;
-			$this->x_path_parts_view = $this->x_path_root . DS . Self::DIRNAME_VIEW . DS . self::DIRNAME_PARTS . DS;
-        }
+	    }
 
 	public function request($req){
             $this->x_request = $req;
@@ -235,5 +227,9 @@ class XFile {
             
             $this->x_path_root = $this->x_path_app_root . DS;
         }
+
+	public function getDefaultTplPath() {
+		return $this->x_path_root  . self::DIRNAME_VIEW . DS;
+	}
 
 }

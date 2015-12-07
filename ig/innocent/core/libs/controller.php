@@ -13,6 +13,8 @@ class Controller extends Core {
 
     protected $tplPath;
 
+	protected $tplPartsPath;
+
     protected $modelPath;
 
     public $models;
@@ -83,6 +85,14 @@ class Controller extends Core {
 
     }
 
+	public function tplPartsSetter($path){
+		if(!is_dir($path)){
+			throw new Exception("not Parts tpl path");
+		}
+
+		$this->tplPartsPath = $path;
+	}
+
     public function modelPathSetter($path){
         $this->modelPath = $path;
     }
@@ -145,10 +155,9 @@ class Controller extends Core {
         exit();
     }
 
-	public function partsObjectSetter($obj){
-		$name = get_class($obj);
-		$this->$name = $obj;
-		$this->partName[$name] = $name;
+	public function parts($tpl) {
+		$tpl = str_replace("/", DS, $tpl);
+		require( $this->tplPartsPath . DS . $tpl . ".html");
 	}
 
     public function __destruct(){

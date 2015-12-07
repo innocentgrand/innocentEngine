@@ -61,17 +61,6 @@ try {
 	}
 	$x_object = $FWM->makeCObject();
 
-	/**
-	 * Parts読み込み
-	 */
-	if($x_object->parts) {
-		foreach ($x_object->parts as $parts) {
-			$tmpParts = $FWM->partsObjectLoader($parts);
-			if($tmpParts) {
-				$x_object->partsObjectSetter($tmpParts);
-			}
-		}
-	}
 
 	$x_object->logDirSetter($FWM->getLogDirPath());
 	$x_object->setPrefix($x_prefix);
@@ -95,6 +84,7 @@ TEXT;
 		$x_object->$_x_method();
 	}
 	if ($x_object->tplflg) {
+		$x_object->tplPartsSetter($FWM->getDefaultTplPath());
 		$x_object->tplPathsetter($FWM->getViewPath());
 	}
 	$x_object->$x_method();
