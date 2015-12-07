@@ -26,6 +26,7 @@ class Model extends Core {
     public function __construct($dbsetting, $DBkey = null, $prefix = null){
         
         $i = 0;
+		$dbName = array();
         foreach ((array)$dbsetting as $key => $val) {
             $dsn[$key] = <<<TEXT
 mysql:host={$val['host']};dbname={$val['db']};charset=utf8
@@ -33,6 +34,8 @@ TEXT;
             $dsn2[$i] = <<<TEXT
 mysql:host={$val['host']};dbname={$val['db']};charset=utf8
 TEXT;
+			$dbName[$key] = $val['db'];
+			$dbName[$i] = $val['db'];
 
             $user[$key] = $val['user'];
             $pass[$key] = $val['passwd'];
@@ -43,16 +46,20 @@ TEXT;
 
 
 		try {
+			$this->table = strtolower(get_class($this));
 			if (empty($DBkey)) {
 				$this->makeDbObject($dsn[0], $user[0], $pass[0]);
+				$tmpDbName = $dbName[0];
 			} else {
 				if ($prefix) {
 					$DBkey .= "_" . $prefix;
 					$this->dbKeyPrefix = $prefix;
 				}
 				$this->makeDbObject($dsn[$DBkey], $user[$DBkey], $pass[$DBkey]);
+				$tmpDbName = $dbName[$DBkey];
 			}
-			$this->table = strtolower(get_class($this));
+
+			$this->tableExist($tmpDbName);
 
 			$this->getColumn();
 
@@ -86,6 +93,8 @@ TEXT;
 
     protected function makeDbObject($dsn,$uid,$upass,$charset="utf8"){
         try{
+			pr($dsn);
+			pr($uid);
 			pr($upass);
             $this->dbObject = new PDO($dsn,$uid,$upass);
             $stmt = $this->dbObject->prepare("SET NAMES :charset");
@@ -234,5 +243,24 @@ TEXT;
         }
         return $where;
     }
+
+	private function tableExist($dbName) {
+		$sql = <<<SQL
+SELECT COUNT(*) AS COUNTER FROM information_schema.tables WHERE table_name = '{$this->table}' AND table_schema = '{$dbName}'
+SQL;
+		$this->stmtObject = $this->dbObject->query($sql);
+		$count = $this->stmtObject->fetch();
+		if ($count['COUNTER'] != 0) {
+			return true;
+		}
+		else {
+			$this->tablePrefixCanger($dbName);
+		}
+	}
+
+	private function tablePrefixCanger($dbName){
+		$wc = new Wordconversion();
+		pr($wc);
+	}
 
 }
