@@ -11,7 +11,6 @@ class Alias extends Core {
 
 		public function aliasDataSetter($data){
 			$this->aliasSetData = $data;
-			pr($this->aliasData);
 		}
 
 		protected function makeAliasData(){

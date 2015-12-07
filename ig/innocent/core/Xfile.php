@@ -95,7 +95,6 @@ class XFile {
             }
             $x_class_name = $x_class_sub_name."Controller";
             $x_controller_file = $this->x_path_controller . self::DIRNAME_CONT . DS . $x_class_name . ".php";
-            pr($x_controller_file);
             $this->subClassName = $x_class_sub_name;
 
             return $this->makeObject($x_class_name,$x_controller_file);	

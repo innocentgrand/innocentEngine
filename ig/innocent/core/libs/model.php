@@ -93,10 +93,7 @@ TEXT;
 
     protected function makeDbObject($dsn,$uid,$upass,$charset="utf8"){
         try{
-			pr($dsn);
-			pr($uid);
-			pr($upass);
-            $this->dbObject = new PDO($dsn,$uid,$upass);
+			$this->dbObject = new PDO($dsn,$uid,$upass);
             $stmt = $this->dbObject->prepare("SET NAMES :charset");
 
             $stmt->bindValue(":charset", $charset, PDO::PARAM_STR);
@@ -111,86 +108,86 @@ TEXT;
     }
 
     public function find($kind, $option = array()){
-			try{
+        try{
 
-					$sql = "SELECT ";
-					if(!empty($option['fields'])){
-							$fieldData = $option['fields'];
-					} else {
-							$fieldData = null;
-					}
-					if(!empty($option['conditions'])){
-							$conditionData = $option['conditions'];
-					} else {
-							$conditionData = null;
-					}
-					switch($kind){
-							case 'first':
-									$field = $this->makeFields($fieldData);
-									$sql .= $field;
-									$sql .= " FROM {$this->table} ";
-									$where = $this->makeWhere($conditionData);
-									if($where != ""){
-											$sql .= " WHERE " .  $where;
-									}
-									$this->stmtObject = $this->dbObject->prepare($sql);
-									return $this->returnFirst($conditionData);
-									break;
-							case 'all':
-									$field = $this->makeFields($fieldData);
-									$sql .= $field;
-									$sql .= " FROM {$this->table} ";
-									$where = $this->makeWhere($conditionData);
-									if($where != ""){
-											$sql .= " WHERE " .  $where;
-									}
-									$this->stmtObject = $this->dbObject->prepare($sql);
-									return $this->returnAll($conditionData);
-									break;
-							case 'count':
-									//$field = $this->makeFields($fieldData);
-									$sql .= "COUNT(*) AS counter";
-									$sql .= " FROM {$this->table} ";
-									$where = $this->makeWhere($conditionData);
-									if($where != ""){
-											$sql .= " WHERE " .  $where;
-									}
-									$this->stmtObject = $this->dbObject->prepare($sql);
-									$data = $this->returnFirst($conditionData);
-									return (int)$data['counter'];
-									break;
-					}
+            $sql = "SELECT ";
+            if(!empty($option['fields'])){
+                    $fieldData = $option['fields'];
+            } else {
+                    $fieldData = null;
+            }
+            if(!empty($option['conditions'])){
+                    $conditionData = $option['conditions'];
+            } else {
+                    $conditionData = null;
+            }
+            switch($kind){
+                case 'first':
+                    $field = $this->makeFields($fieldData);
+                    $sql .= $field;
+                    $sql .= " FROM {$this->table} ";
+                    $where = $this->makeWhere($conditionData);
+                    if($where != ""){
+                            $sql .= " WHERE " .  $where;
+                    }
+                    pr($sql);
+                    $this->stmtObject = $this->dbObject->prepare($sql);
+                    return $this->returnFirst($conditionData);
+                    break;
+                case 'all':
+                    $field = $this->makeFields($fieldData);
+                    $sql .= $field;
+                    $sql .= " FROM {$this->table} ";
+                    $where = $this->makeWhere($conditionData);
+                    if($where != ""){
+                            $sql .= " WHERE " .  $where;
+                    }
+                    $this->stmtObject = $this->dbObject->prepare($sql);
+                    return $this->returnAll($conditionData);
+                    break;
+                case 'count':
+                    //$field = $this->makeFields($fieldData);
+                    $sql .= "COUNT(*) AS counter";
+                    $sql .= " FROM {$this->table} ";
+                    $where = $this->makeWhere($conditionData);
+                    if($where != ""){
+                            $sql .= " WHERE " .  $where;
+                    }
+                    $this->stmtObject = $this->dbObject->prepare($sql);
+                    $data = $this->returnFirst($conditionData);
+                    return (int)$data['counter'];
+                    break;
+            }
 
-			} catch(PDOException $ex){
-					throw $ex;
-			}
+        } catch(PDOException $ex){
+                throw $ex;
+        }
     }
 
     protected function returnFirst($conditions = null){
             foreach($this->columns as $index => $value){
-                    foreach($this->whereDatas as $key => $val){
-                            if($value['name'] == $val){
-                                    $bindStr = ":" . $value['name'];
-                                    $this->stmtObject->bindParam($bindStr,$conditions[$value['name']],$value['type']);
-                                    $this->stmtObject->execute();
-                                    return $this->stmtObject->fetch();
-                            }
+                foreach($this->whereDatas as $key => $val){
+                    if($value['name'] == $val){
+                        $bindStr = ":" . $value['name'];
+                        $this->stmtObject->bindParam($bindStr,$conditions[$value['name']],$value['type']);
                     }
-            }	
+                }
+            }
+            $this->stmtObject->execute();
+            return $this->stmtObject->fetch();
     }
 
     protected function returnAll($conditions = null){
-            pr($this->stmtObject);
-            foreach($this->columns as $index => $value){
-                    foreach($this->whereDatas as $key => $val){
-                            if($value['name'] == $val){
-                                    $bindStr = ":" . $value['name'];
-                                    $this->stmtObject->bindParam($bindStr,$conditions[$value['name']],$value['type']);
-                                    $this->stmtObject->execute();
-                                    return $this->stmtObject->fetchAll();
-                            }
-                    }
-            }	
+        foreach($this->columns as $index => $value){
+            foreach($this->whereDatas as $key => $val){
+                if($value['name'] == $val){
+                        $bindStr = ":" . $value['name'];
+                        $this->stmtObject->bindParam($bindStr,$conditions[$value['name']],$value['type']);
+                }
+            }
+        }
+        $this->stmtObject->execute();
+        return $this->stmtObject->fetchAll();
     }
 
     protected function setParams($conditions = null){
@@ -205,15 +202,15 @@ TEXT;
     protected function makeFields($field = null){
         $makeFieldStr = "";
         if(!empty($field)){
-            foreach($this->columns as $name => $volumes){
-                foreach($volumes as $volume){
-                    if($name == 'type')
+            foreach($this->columns as $name => $volumes) {
+                foreach ($volumes as $volume) {
+                    if ($name == 'type')
                         break;
-                    foreach($field as $f){
-                        if($volume == $f){
-                            if($makeFieldStr == ""){
+                    foreach ($field as $f) {
+                        if ($volume == $f) {
+                            if ($makeFieldStr == "") {
                                 $makeFieldStr = $f;
-                            }else{
+                            } else {
                                 $makeFieldStr .= "," . $f;
                             }
                         }
@@ -227,21 +224,34 @@ TEXT;
     protected function makeWhere($conditions = null){
         $where = "";
         if(!empty($conditions)){
+            $conditions = $this->conditioFairing($conditions);
             if(array_depth($conditions) == self::CONDITION_SIMPLE) {
-                foreach($conditions as $name => $val){
-                    if($where == ""){
+                foreach($conditions as $name => $val) {
+                    if ($where == "") {
                         $where .= "{$name} = :{$name}";
                         $this->whereDatas[] = $name;
-                    } 
-                    else {
+                    } else {
                         $where .= " AND ";
                         $where .= " {$name} = :{$name}";
                         $this->whereDatas[] = $name;
                     }
-                }	
+                }
             } 
         }
         return $where;
+    }
+
+    private function conditioFairing($data) {
+        $arr = array();
+        foreach($this->columns as $column) {
+            foreach ($data as $k => $v) {
+                if ($column['name'] == $k) {
+                    $arr[$column['name']] = $v;
+                }
+            }
+        }
+        return $arr;
+
     }
 
 	private function tableExist($dbName) {
@@ -260,7 +270,8 @@ SQL;
 
 	private function tablePrefixCanger($dbName){
 		$wc = new Wordconversion();
-		pr($wc);
+		$this->table = $wc->make($this->table);
+        $this->tableExist($dbName);
 	}
 
 }
