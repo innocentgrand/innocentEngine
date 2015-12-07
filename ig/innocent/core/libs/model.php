@@ -130,7 +130,6 @@ TEXT;
                     if($where != ""){
                             $sql .= " WHERE " .  $where;
                     }
-                    pr($sql);
                     $this->stmtObject = $this->dbObject->prepare($sql);
                     return $this->returnFirst($conditionData);
                     break;

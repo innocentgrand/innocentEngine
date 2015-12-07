@@ -6,6 +6,7 @@ class XFile {
 	const DIRNAME_VIEW = "view";
 	const DIRNAME_LOG = "log";
 	const DIRNAME_CONFS = "confs";
+	const DIRNAME_PARTS = "parts";
         
 	
 	private $x_path_root;
@@ -30,6 +31,8 @@ class XFile {
 
 	private $x_exp_path;
 
+	private $x_path_parts;
+
 	public function __construct($rootDir){
             $this->x_path_root = $rootDir;
 
@@ -38,6 +41,8 @@ class XFile {
             $this->x_path_view = $this->x_path_root . DS;
             $this->x_path_log = $this->x_path_root . DS . self::DIRNAME_LOG . DS;
             $this->x_path_confs = $this->x_path_root . DS . self::DIRNAME_CONFS .DS;
+			$this->x_path_parts = $this->x_path_controller . self::DIRNAME_PARTS . DS;
+
 
             try{
 
@@ -52,6 +57,7 @@ class XFile {
             $this->x_path_controller = $this->x_path_root;
             $this->x_path_model = $this->x_path_root;
             $this->x_path_view = $this->x_path_root;
+			$this->x_path_parts = $this->x_path_root . DS . self::DIRNAME_CONT . DS . self::DIRNAME_PARTS  . DS;
         }
 
 	public function request($req){
@@ -97,9 +103,21 @@ class XFile {
             $x_controller_file = $this->x_path_controller . self::DIRNAME_CONT . DS . $x_class_name . ".php";
             $this->subClassName = $x_class_sub_name;
 
-            return $this->makeObject($x_class_name,$x_controller_file);	
-				
+            return $this->makeObject($x_class_name,$x_controller_file);
+	}
 
+    public function partsObjectLoader($name) {
+		$className = ucfirst($name);
+		$x_parts = $this->x_path_parts . $className . ".php";
+
+		if(file_exists($x_parts)) {
+			require_once($x_parts);
+			if(class_exists($className)) {
+				$x_obj = new $className();
+				return $x_obj;
+			}
+		}
+		return false;
 	}
 
 	private function makeObject($className,$path){
@@ -122,15 +140,9 @@ class XFile {
 
             if(!empty($this->x_exp_path)){
                 $tmpPath = "/" . $this->x_exp_path[1];
-                if(!empty($this->hierarchy)){
-                        foreach($this->hierarchy as $hiKey => $hiValue){
-                                if($tmpPath == $hiValue['alias']){
-                                        $tmpViewDir = $this->x_path_root . DS . $hiValue['hi']['hi'] . DS . self::DIRNAME_VIEW . DS . $this->subClassName;
-                                }
-                        }
-                }
+
                 if($tmpViewDir == ""){
-                        $tmpViewDir = $this->x_path_root . DS .self::DIRNAME_VIEW . DS . $this->subClassName;
+                        $tmpViewDir = $this->x_path_root  . self::DIRNAME_VIEW . DS . $this->subClassName;
                 }
                 return $tmpViewDir;
             }

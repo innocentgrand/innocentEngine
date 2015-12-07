@@ -19,6 +19,8 @@ $x_path_view = $x_path_root . DS . "view" . DS;
 $x_path_log = $x_path_root . DS . "log" . DS;
 $x_path_confs = $x_path_root . DS ."confs" . DS;
 
+$x_path_parts = $x_path_controller . "parts" . DS;
+
 try {
 	require_once($x_path_root . DS . 'core' . DS . 'Xfile.php');
 	$FWM = new XFile($x_path_root);
@@ -74,6 +76,18 @@ try {
 TEXT;
 		throw new Exception($text);
 	}
+	/**
+	 * Parts読み込み
+	 */
+	if($x_object->parts) {
+		foreach ($x_object->parts as $parts) {
+			$tmpParts = $FWM->partsObjectLoader($parts);
+			if($tmpParts) {
+				$x_object->partsObjectSetter($tmpParts);
+			}
+		}
+	}
+
 	// 先に実行される特殊メソッド
 	$_x_method = '_' . $x_method;
 	if (method_exists($x_object, $_x_method)) {

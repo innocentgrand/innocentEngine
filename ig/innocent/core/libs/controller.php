@@ -27,6 +27,8 @@ class Controller extends Core {
 
 	public $tplflg;
 
+	public $parts = array();
+
     public function __construct(){
         parent::__construct();
         $this->params = array(
@@ -141,8 +143,13 @@ class Controller extends Core {
         exit();
     }
 
+	public function partsObjectSetter($obj){
+		$name = get_class($obj);
+		$this->$name = $obj;
+	}
+
     public function __destruct(){
-                    parent::__destruct();
+		parent::__destruct();
     }
 
 
