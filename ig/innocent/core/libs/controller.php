@@ -7,7 +7,7 @@ class Controller extends Core {
 
     protected $_files;
 
-    protected $session;
+    protected $Session;
 
     protected $assignData;
 
@@ -25,6 +25,8 @@ class Controller extends Core {
 
     private $prefix;
 
+	public $tplflg;
+
     public function __construct(){
         parent::__construct();
         $this->params = array(
@@ -36,6 +38,7 @@ class Controller extends Core {
         $this->Session = new SessionClass();
         $this->form = new Form();
         $this->form->dataSetter($this->params);
+		$this->tplflg = true;
     }
 
     public function startUp(){
@@ -131,6 +134,11 @@ class Controller extends Core {
 
     public function shutDown(){
 
+    }
+
+    public function redirect($url) {
+        header("Location: {$url}");
+        exit();
     }
 
     public function __destruct(){
