@@ -46,10 +46,6 @@ class Parts extends Core {
         return htmlspecialchars($str, ENT_QUOTES);
     }
 
-    public function setPrefix($prefix) {
-        $this->prefix = $prefix;
-    }
-
     public function __destruct(){
                     parent::__destruct();
     }

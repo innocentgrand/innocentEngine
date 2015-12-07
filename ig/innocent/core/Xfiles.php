@@ -61,6 +61,18 @@ try {
 	}
 	$x_object = $FWM->makeCObject();
 
+	/**
+	 * Parts読み込み
+	 */
+	if($x_object->parts) {
+		foreach ($x_object->parts as $parts) {
+			$tmpParts = $FWM->partsObjectLoader($parts);
+			if($tmpParts) {
+				$x_object->partsObjectSetter($tmpParts);
+			}
+		}
+	}
+
 	$x_object->logDirSetter($FWM->getLogDirPath());
 	$x_object->setPrefix($x_prefix);
 	$x_object->modelPathSetter($FWM->getModelPath());
@@ -75,17 +87,6 @@ try {
 {$x_class_name} not method exists
 TEXT;
 		throw new Exception($text);
-	}
-	/**
-	 * Parts読み込み
-	 */
-	if($x_object->parts) {
-		foreach ($x_object->parts as $parts) {
-			$tmpParts = $FWM->partsObjectLoader($parts);
-			if($tmpParts) {
-				$x_object->partsObjectSetter($tmpParts);
-			}
-		}
 	}
 
 	// 先に実行される特殊メソッド

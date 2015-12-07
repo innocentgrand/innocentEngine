@@ -29,6 +29,8 @@ class Controller extends Core {
 
 	public $parts = array();
 
+	protected $partName = array();
+
     public function __construct(){
         parent::__construct();
         $this->params = array(
@@ -90,19 +92,19 @@ class Controller extends Core {
     }
 
     protected function set($todata=null, $fromdata=null,$escape=true) {
-    if($escape){
-            $fromdata = $this->sanitize($fromdata);
-    }
-    $this->assignData[$todata] = $fromdata;
-}
+		if($escape){
+				$fromdata = $this->sanitize($fromdata);
+		}
+			$this->assignData[$todata] = $fromdata;
+		}
 
-    protected function sanitize(&$data){
-    if(is_array($data)){
-            return array_map(array(&$this,'sanitize'),$data);
-    } else {
-            return $this->h($data);
-    }
-}
+	protected function sanitize(&$data){
+		if(is_array($data)){
+				return array_map(array(&$this,'sanitize'),$data);
+		} else {
+				return $this->h($data);
+		}
+	}
 
     protected function tpl($mytpl = null) {
 
@@ -146,6 +148,7 @@ class Controller extends Core {
 	public function partsObjectSetter($obj){
 		$name = get_class($obj);
 		$this->$name = $obj;
+		$this->partName[$name] = $name;
 	}
 
     public function __destruct(){
