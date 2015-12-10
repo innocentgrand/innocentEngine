@@ -11,20 +11,24 @@ class SessionClass extends core {
 	public function read($key){
 		$data = null;
 		session_start();
-		if($this->check($key)){
+		if($this->check($key,false)){
 			$data = $_SESSION[$key];
 		}
 		session_write_close();
 		return $data;
 	}
 
-	public function check($key){
+	public function check($key, $start = true){
 		$r = true;
-		session_start();
+		if($start) {
+			session_start();
+		}
 		if(empty($_SESSION[$key])){
 			$r = false;
 		}
-		session_write_close();
+		if($start) {
+			session_write_close();
+		}
 		return $r;
 	}
         

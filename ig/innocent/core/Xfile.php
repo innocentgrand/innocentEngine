@@ -31,6 +31,7 @@ class XFile {
 
 	private $x_path_parts;
 
+	private $loaderPaths;
 
 	public function __construct($rootDir){
             $this->x_path_root = $rootDir;
@@ -42,7 +43,12 @@ class XFile {
             $this->x_path_confs = $this->x_path_root . DS . self::DIRNAME_CONFS .DS;
 
             try{
-
+				if (is_array(Loader::$path)) {
+					foreach (Loader::$path as $path) {
+						$path = str_replace("/", DS, $path);
+						$this->loaderPaths[] = $path;
+					}
+				}
 
             }catch(Exception $ex){
                     throw($ex);
@@ -54,6 +60,15 @@ class XFile {
             $this->x_path_controller = $this->x_path_root;
             $this->x_path_model = $this->x_path_root;
             $this->x_path_view = $this->x_path_root;
+
+			if (!empty($this->loaderPaths)) {
+				foreach ($this->loaderPaths as $path) {
+					if (file_exists($this->x_path_root . $path)) {
+						require_once($this->x_path_root . $path);
+					}
+				}
+			}
+
 	    }
 
 	public function request($req){

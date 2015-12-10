@@ -155,9 +155,19 @@ class Controller extends Core {
         exit();
     }
 
-	public function parts($tpl) {
+	public function parts($tpl, $method = null, $arg = null) {
 		$tpl = str_replace("/", DS, $tpl);
-		require( $this->tplPartsPath . DS . $tpl . ".html");
+        if ($method) {
+            if (method_exists($this, $method)) {
+                $this->$method();
+            }
+        }
+        if(!empty($this->assignData)) {
+            extract($this->assignData, EXTR_SKIP);
+        }
+		if (file_exists($this->tplPartsPath . DS . $tpl . ".html")) {
+			require($this->tplPartsPath . DS . $tpl . ".html");
+		}
 	}
 
     public function __destruct(){

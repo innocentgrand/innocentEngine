@@ -23,9 +23,12 @@ $x_path_parts = $x_path_controller . "parts" . DS;
 
 try {
 	require_once($x_path_root . DS . 'core' . DS . 'Xfile.php');
+
+	$x_config = new CONFIG($x_path_confs);
+
 	$FWM = new XFile($x_path_root);
 	
-	$x_config = new CONFIG($x_path_confs);
+
 
 	$xmode = $x_config->getSetting();
 
@@ -59,6 +62,9 @@ try {
 		$FWM->pathiIniLoader($x_config->getDirPath());
 		$FWM->resetDirPath();
 	}
+
+
+
 	$x_object = $FWM->makeCObject();
 
 
