@@ -33,6 +33,10 @@ class Controller extends Core {
 
 	protected $partName = array();
 
+    protected $layoutFlg = false;
+
+    protected $layout = array();
+
     public function __construct(){
         parent::__construct();
         $this->params = array(
@@ -169,6 +173,10 @@ class Controller extends Core {
 			require($this->tplPartsPath . DS . $tpl . ".html");
 		}
 	}
+
+    public function setLayoutMode($bool) {
+        $this->layoutFlg = $bool;
+    }
 
     public function __destruct(){
 		parent::__destruct();

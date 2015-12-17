@@ -33,6 +33,8 @@ class XFile {
 
 	private $loaderPaths;
 
+	private $layoutMode = false;
+
 	public function __construct($rootDir){
             $this->x_path_root = $rootDir;
 
@@ -245,6 +247,24 @@ class XFile {
 
 	public function getDefaultTplPath() {
 		return $this->x_path_root  . self::DIRNAME_VIEW . DS;
+	}
+
+	public function setLayoutMode($mode = null) {
+		if ($mode){
+			if ($mode == 0 ) {
+				$this->layoutMode = false;
+			}
+			else {
+				$this->layoutMode = true;
+			}
+		}
+		else {
+			$this->layoutMode = false;
+		}
+	}
+
+	public function getLayoutMode() {
+		return $this->layoutMode;
 	}
 
 }

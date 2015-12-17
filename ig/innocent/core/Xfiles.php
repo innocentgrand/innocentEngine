@@ -27,8 +27,6 @@ try {
 	$x_config = new CONFIG($x_path_confs);
 
 	$FWM = new XFile($x_path_root);
-	
-
 
 	$xmode = $x_config->getSetting();
 
@@ -44,6 +42,9 @@ try {
 				}
 				$x_prefix = $xmode['SETTING']['MODE'];
 			}
+		}
+		if ($xmode['SETTING']['LAYOUT']){
+			$FWM->setLayoutMode($xmode['SETTING']['LAYOUT']);
 		}
 	}
 
@@ -69,6 +70,7 @@ try {
 
 
 	$x_object->logDirSetter($FWM->getLogDirPath());
+	$x_object->setLayoutMode($FWM->getLayoutMode());
 	$x_object->setPrefix($x_prefix);
 	$x_object->modelPathSetter($FWM->getModelPath());
 	$x_object->dbDataSetter($x_config->defaulDbGetter());

@@ -45,7 +45,6 @@ class Core {
 
     }
 
-
         public function __destruct(){
         }
 }
