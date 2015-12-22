@@ -96,6 +96,10 @@ TEXT;
 	if (method_exists($x_object, $_x_method)) {
 		$x_object->$_x_method();
 	}
+	if ($FWM->getLayoutMode()) {
+		$x_object->setLayoutMode(true);
+		$x_object->setLayoutPath($FWM->getDefaultTplPath());
+	}
 	if ($x_object->tplflg) {
 		$x_object->tplPartsSetter($FWM->getDefaultTplPath());
 		$x_object->tplPathsetter($FWM->getViewPath());

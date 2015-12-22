@@ -159,6 +159,7 @@ class Controller extends Core {
     protected function layoutLoader() {
         ob_start();
         echo "Layout Mode On";
+
     }
 
     protected function layoutEnd() {
@@ -203,6 +204,10 @@ class Controller extends Core {
 
     public function setLayoutMode($bool) {
         $this->layoutFlg = $bool;
+    }
+
+    public function setLayoutPath($path) {
+        $this->tplLayoutPath = $path . DS . "Layout";
     }
 
     public function __destruct(){
