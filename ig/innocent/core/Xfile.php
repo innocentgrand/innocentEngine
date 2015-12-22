@@ -35,6 +35,8 @@ class XFile {
 
 	private $layoutMode = false;
 
+	private $layoutMark = "";
+
 	public function __construct($rootDir){
             $this->x_path_root = $rootDir;
 
@@ -249,13 +251,16 @@ class XFile {
 		return $this->x_path_root  . self::DIRNAME_VIEW . DS;
 	}
 
-	public function setLayoutMode($mode = null) {
+	public function setLayoutMode($mode = null, $mark = null) {
 		if ($mode){
 			if ($mode == 0 ) {
 				$this->layoutMode = false;
 			}
 			else {
 				$this->layoutMode = true;
+				if ($mark) {
+					$this->layoutMark = $mark;
+				}
 			}
 		}
 		else {
@@ -264,7 +269,10 @@ class XFile {
 	}
 
 	public function getLayoutMode() {
-		return $this->layoutMode;
+		if ($this->layoutMode) {
+			return $this->layoutMark;
+		}
+		return false;
 	}
 
 }

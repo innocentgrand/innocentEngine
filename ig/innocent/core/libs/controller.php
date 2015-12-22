@@ -35,6 +35,8 @@ class Controller extends Core {
 
     protected $layoutFlg = false;
 
+    protected $tplLayoutPath;
+
     protected $layout = array();
 
     public function __construct(){
@@ -122,6 +124,10 @@ class Controller extends Core {
 
     protected function tpl($mytpl = null) {
 
+        if($this->layoutFlg) {
+            $this->layoutLoader();
+        }
+
         $this->assignData['form'] = $this->form;
 
         if(!empty($this->assignData)) {
@@ -139,7 +145,25 @@ class Controller extends Core {
         if(!file_exists($this->tplPath . DS . $filename . ".html")){
             throw new Exception("not tpl file");
         }
-        require( $this->tplPath . DS . $filename . ".html");
+        if($this->layoutFlg) {
+            require( $this->tplPath . DS . $filename . ".html");
+            //$content = ob_end_flush();
+            //echo $content;
+            $this->layoutEnd();
+        }
+        else {
+            require( $this->tplPath . DS . $filename . ".html");
+        }
+    }
+
+    protected function layoutLoader() {
+        ob_start();
+        echo "Layout Mode On";
+    }
+
+    protected function layoutEnd() {
+        echo "Layout Mode End.";
+        echo ob_end_flush();
     }
 
     public function h($str){
@@ -172,6 +196,9 @@ class Controller extends Core {
 		if (file_exists($this->tplPartsPath . DS . $tpl . ".html")) {
 			require($this->tplPartsPath . DS . $tpl . ".html");
 		}
+        else {
+            throw new Exception("not parts file");
+        }
 	}
 
     public function setLayoutMode($bool) {

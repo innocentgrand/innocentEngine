@@ -43,8 +43,13 @@ try {
 				$x_prefix = $xmode['SETTING']['MODE'];
 			}
 		}
-		if ($xmode['SETTING']['LAYOUT']){
-			$FWM->setLayoutMode($xmode['SETTING']['LAYOUT']);
+		if ($xmode['SETTING']['LAYOUT'] ){
+			if($xmode['SETTING']['LAYOUTMARKER']) {
+				$FWM->setLayoutMode($xmode['SETTING']['LAYOUT']);
+			}
+			else {
+				$FWM->setLayoutMode($xmode['SETTING']['LAYOUT'], $xmode['SETTING']['LAYOUTMARKER']);
+			}
 		}
 	}
 
