@@ -44,7 +44,7 @@ try {
 			}
 		}
 		if ($xmode['SETTING']['LAYOUT'] ){
-			if($xmode['SETTING']['LAYOUTMARKER']) {
+			if(empty($xmode['SETTING']['LAYOUTMARKER'])) {
 				$FWM->setLayoutMode($xmode['SETTING']['LAYOUT']);
 			}
 			else {
@@ -96,9 +96,12 @@ TEXT;
 	if (method_exists($x_object, $_x_method)) {
 		$x_object->$_x_method();
 	}
-	if ($FWM->getLayoutMode()) {
+
+	$layoutmode = $FWM->getLayoutMode();
+	if ($layoutmode) {
 		$x_object->setLayoutMode(true);
 		$x_object->setLayoutPath($FWM->getDefaultTplPath());
+		$x_object->setLayoutMarkString($layoutmode);
 	}
 	if ($x_object->tplflg) {
 		$x_object->tplPartsSetter($FWM->getDefaultTplPath());

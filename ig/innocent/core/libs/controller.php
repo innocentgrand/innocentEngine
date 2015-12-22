@@ -37,7 +37,9 @@ class Controller extends Core {
 
     protected $tplLayoutPath;
 
-    protected $layout = array();
+    protected $layout = "";
+
+    protected $layoutMark;
 
     public function __construct(){
         parent::__construct();
@@ -157,14 +159,15 @@ class Controller extends Core {
     }
 
     protected function layoutLoader() {
-        ob_start();
-        echo "Layout Mode On";
+
+        $path = $this->tplLayoutPath . DS .  $this->layout;
+        require($path);
 
     }
 
     protected function layoutEnd() {
-        echo "Layout Mode End.";
-        echo ob_end_flush();
+        $str = ob_end_flush();
+        //echo str_replace($this->layoutMark);
     }
 
     public function h($str){
@@ -208,6 +211,10 @@ class Controller extends Core {
 
     public function setLayoutPath($path) {
         $this->tplLayoutPath = $path . DS . "Layout";
+    }
+
+    public function setLayoutMarkString($str) {
+        $this->layoutMark = $str;
     }
 
     public function __destruct(){
