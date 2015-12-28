@@ -41,6 +41,9 @@ class Controller extends Core {
 
     protected $layoutMark;
 
+    protected $_contentData;
+    protected $_layoutData;
+
     public function __construct(){
         parent::__construct();
         $this->params = array(
@@ -148,9 +151,10 @@ class Controller extends Core {
             throw new Exception("not tpl file");
         }
         if($this->layoutFlg) {
+            ob_start();
             require( $this->tplPath . DS . $filename . ".html");
-            //$content = ob_end_flush();
-            //echo $content;
+            $this->_contentData = ob_get_contents();
+            ob_end_clean();
             $this->layoutEnd();
         }
         else {
@@ -159,15 +163,18 @@ class Controller extends Core {
     }
 
     protected function layoutLoader() {
-
+        ob_start();
         $path = $this->tplLayoutPath . DS .  $this->layout;
         require($path);
-
+        $this->_layoutData = ob_get_contents();
+        ob_end_clean();
     }
 
     protected function layoutEnd() {
-        $str = ob_end_flush();
-        //echo str_replace($this->layoutMark);
+        //ob_end_clean();
+        //ob_end_flush();
+        //$str = str_replace($this->_layoutData, '', $this->_contentData);
+        echo str_replace($this->layoutMark, $this->_contentData, $this->_layoutData);
     }
 
     public function h($str){
