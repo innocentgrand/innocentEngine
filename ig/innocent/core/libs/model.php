@@ -273,4 +273,29 @@ SQL;
         $this->tableExist($dbName);
 	}
 
+    public function save($data=array())
+    {
+        try {
+            $this->begin();
+
+        }catch (PDOException $ex){
+            $this->rollback();
+            throw($ex);
+        }catch (Exception $ex){
+            throw($ex);
+        }
+    }
+
+
+    public function begin(){
+        $this->dbObject->beginTransaction();
+    }
+
+    public function commit(){
+        $this->dbObject->commit();
+    }
+    public function rollback(){
+        $this->dbObject->rollBack();
+    }
+
 }

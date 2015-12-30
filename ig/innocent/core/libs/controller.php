@@ -171,9 +171,6 @@ class Controller extends Core {
     }
 
     protected function layoutEnd() {
-        //ob_end_clean();
-        //ob_end_flush();
-        //$str = str_replace($this->_layoutData, '', $this->_contentData);
         echo str_replace($this->layoutMark, $this->_contentData, $this->_layoutData);
     }
 
