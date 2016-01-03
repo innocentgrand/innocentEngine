@@ -273,11 +273,25 @@ SQL;
         $this->tableExist($dbName);
 	}
 
-    public function save($data=array())
+    public function save($data=array(), $condition = array())
     {
         try {
             $this->begin();
 
+            if(!$data) {
+                return false;
+            }
+
+            $sql = "";
+            if($data['id']){
+                $sql .= "UPDATE {$this->table} ";
+                $sql .= "SET ";
+                foreach($data as $name => $value) {
+                    
+                }
+            }
+
+            $this->commit();
         }catch (PDOException $ex){
             $this->rollback();
             throw($ex);
