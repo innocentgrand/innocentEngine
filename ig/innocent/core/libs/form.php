@@ -9,13 +9,13 @@ class Form extends core {
             foreach($opt as $key => $value){
                 switch($key){
                     case 'accept-charset':
-                        $option .= ' accept-charset="' . $valu . '"'; 
+                        $option .= ' accept-charset="' . $value . '"';
                         break;
                     case 'enctype':
-                        $option .= ' enctype="' . $valu . '"'; 
+                        $option .= ' enctype="' . $value . '"';
                         break;
                     case 'target':
-                        $option .= ' target="' . $valu . '"'; 
+                        $option .= ' target="' . $value . '"';
                         break;
                     default:
                         $option .= ' '.$key.'="' . $value . '"';
@@ -125,6 +125,10 @@ class Form extends core {
             }
         }
         return '<input type="submit" name="'.$name.'" value="'.$value.'"'.$option.' />';
+    }
+
+    public function file($name="file",$opt=array()) {
+        return '<input type="file" name="'.$name.'" />';
     }
 
     public function dataSetter($data){

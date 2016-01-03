@@ -47,7 +47,7 @@ TEXT;
 
 		try {
 			$this->table = strtolower(get_class($this));
-			if (empty($DBkey)) {
+            if (empty($DBkey)) {
 				$this->makeDbObject($dsn[0], $user[0], $pass[0]);
 				$tmpDbName = $dbName[0];
 			} else {
@@ -58,6 +58,7 @@ TEXT;
 				$this->makeDbObject($dsn[$DBkey], $user[$DBkey], $pass[$DBkey]);
 				$tmpDbName = $dbName[$DBkey];
 			}
+
 
 			$this->tableExist($tmpDbName);
 
@@ -286,11 +287,19 @@ SQL;
             if($data['id']){
                 $sql .= "UPDATE {$this->table} ";
                 $sql .= "SET ";
+                $setSql = "";
                 foreach($data as $name => $value) {
-                    
+                    if($setSql == "") {
+                        $setSql .= "{$name} = :{$name}";
+                    }
+                    else{
+                        $setSql .= ",{$name} = :{$name}";
+                    }
                 }
+                $sql .= $setSql;
+                $sql .= " WHERE id =:id";
             }
-
+pr($sql);
             $this->commit();
         }catch (PDOException $ex){
             $this->rollback();
