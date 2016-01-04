@@ -228,5 +228,13 @@ class Controller extends Core {
 		parent::__destruct();
     }
 
+    public function is_set($val){
+        if($val){
+            return $val;
+        }
+        else {
+            return "";
+        }
+    }
 
 }

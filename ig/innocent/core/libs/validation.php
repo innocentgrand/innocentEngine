@@ -19,15 +19,14 @@ class Validation extends Core {
         foreach($this->rule as $name => $check) {
             foreach($check as $method['validation'] => $m) {
                 foreach((array)$m as $key => $m2) {
-                    pr($m2);
                     if (method_exists(__CLASS__, $m2)) {
                         if (!is_array($m2)) {
-                            if ($this->$m2($this->_post[$name])) {
+                            if (!$this->$m2($this->_post[$name])) {
                                 $this->msg = $check["msg"];
                                 return false;
                             }
                         } else {
-                            if ($this->$m2($this->_post[$name], $opt)) {
+                            if (!$this->$m2($this->_post[$name], $m2)) {
                                 $this->msg = $check["msg"];
                                 return false;
                             }
