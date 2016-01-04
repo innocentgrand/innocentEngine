@@ -110,13 +110,13 @@ class Form extends core {
             foreach($opt as $key => $value){
                 switch($key){
                     case 'formaction':
-                        $option .= ' formaction="' . $valu . '"'; 
+                        $option .= ' formaction="' . $value . '"';
                         break;
                     case 'formenctype':
-                        $option .= ' formenctype="' . $valu . '"'; 
+                        $option .= ' formenctype="' . $value . '"';
                         break;
                     case 'formmethod':
-                        $option .= ' formmethod="' . $valu . '"'; 
+                        $option .= ' formmethod="' . $value . '"';
                         break;
                     default:
                         $option .= ' '.$key.'="' . $value . '"';
@@ -129,6 +129,50 @@ class Form extends core {
 
     public function file($name="file",$opt=array()) {
         return '<input type="file" name="'.$name.'" />';
+    }
+
+    public function textarea($name, $opt) {
+        $html = "<textarea __options__ >";
+        $option = "";
+        if(!empty($opt)){
+            foreach($opt as $key => $value){
+                switch($key){
+                    case "cols":
+                        $option .= ' cols="' . $value . '"';
+                        break;
+                    case "rows":
+                        $option .= ' rows="' . $value . '"';
+                        break;
+                    case "autofocus":
+                        $option .= " autofocus";
+                        break;
+                    case "disabled":
+                        $option .= " disabled";
+                        break;
+                    case "wrap":
+                        $option .= ' wrap="' . $value . '"';
+                        break;
+                    default:
+                        if($value != "") {
+                            $option .= ' ' . $key . '="' . $value . '"';
+                        }
+                        else {
+                            $option .= ' ' . $key;
+                        }
+                        break;
+                }
+            }
+        }
+        $html = str_replace("__options__", $option, $html);
+        $setVal = "";
+        foreach($this->_data['post'] as $indexName => $val){
+            if($name == $indexName){
+                $setVal = $val;
+                break;
+            }
+        }
+        $html .= "{$setVal}</textarea>";
+        return $html;
     }
 
     public function dataSetter($data){

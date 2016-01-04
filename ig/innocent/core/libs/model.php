@@ -22,7 +22,7 @@ class Model extends Core {
     protected $dbconStrArray;
 
 	private $dbKeyPrefix;
-    
+
     public function __construct($dbsetting, $DBkey = null, $prefix = null){
         
         $i = 0;
@@ -70,6 +70,12 @@ TEXT;
 		}catch (Exception $ex) {
 			throw $ex;
 		}
+    }
+
+    public function validate($post){
+        if($this->rule) {
+            return $this->validate->validate($this->rule, $post);
+        }
     }
 
     protected function startUp(){
