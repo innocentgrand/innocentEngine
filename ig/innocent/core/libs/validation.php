@@ -3,6 +3,7 @@ class Validation extends Core {
     
     protected $rule;
     protected $_post;
+    public $msg = "";
     
     public function __construct($rule=null, $post=null){
 
@@ -16,9 +17,22 @@ class Validation extends Core {
 
     protected function exec() {
         foreach($this->rule as $name => $check) {
-            if (method_exists($this, $check)) {
-                if($this->$check($this->_post[$name], $check)){
-                    return $check["msg"];
+            foreach($check as $method['validation'] => $m) {
+                foreach((array)$m as $key => $m2) {
+                    pr($m2);
+                    if (method_exists(__CLASS__, $m2)) {
+                        if (!is_array($m2)) {
+                            if ($this->$m2($this->_post[$name])) {
+                                $this->msg = $check["msg"];
+                                return false;
+                            }
+                        } else {
+                            if ($this->$m2($this->_post[$name], $opt)) {
+                                $this->msg = $check["msg"];
+                                return false;
+                            }
+                        }
+                    }
                 }
             }
         }

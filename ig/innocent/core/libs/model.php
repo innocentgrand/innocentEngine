@@ -17,11 +17,13 @@ class Model extends Core {
 
     protected $whereDatas;
 
-    protected $validation;
+    public $validation;
 
     protected $dbconStrArray;
 
 	private $dbKeyPrefix;
+
+    public $rule;
 
     public function __construct($dbsetting, $DBkey = null, $prefix = null){
         
@@ -72,9 +74,13 @@ TEXT;
 		}
     }
 
-    public function validate($post){
-        if($this->rule) {
-            return $this->validate->validate($this->rule, $post);
+    public function validateRule($arr=null) {
+        $this->rule = $arr;
+    }
+
+    public function validate($post=null){
+        if(!empty($this->rule)) {
+            return $this->validation->validate($this->rule, $post);
         }
     }
 

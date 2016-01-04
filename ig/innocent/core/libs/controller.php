@@ -82,6 +82,9 @@ class Controller extends Core {
                     $this->{$tmpModelName} = new $tmpModelName($this->dbSetting);
                 }
 
+                if($this->{$tmpModelName}->rule) {
+                    $this->{$tmpModelName}->validateRule($this->{$tmpModelName}->rule);
+                }
 
             }
         }
