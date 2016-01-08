@@ -301,43 +301,34 @@ SQL;
                 $sql .= "SET ";
                 $setSql = "";
                 foreach($this->columns as $column) {
-                    foreach ($data as $name => $value) {
-                        switch($column["name"]) {
-                            case "updated":
-                                $setSql .= ",updated=NOW()";
-                                break;
-                            case "modified":
-                                $setSql .= ",modified=NOW()";
-                                break;
-                            default:
+                    switch($column["name"]) {
+                        case "updated":
+                            $setSql .= ",updated=NOW()";
+                            break;
+                        case "modified":
+                            $setSql .= ",modified=NOW()";
+                            break;
+                        default:
+                            foreach ($data as $name => $value) {
                                 if ($column["name"] == $name) {
                                     if ($setSql == "") {
-                                        $setSql .= "{$name} = ':{$name}'";
+                                        $setSql .= "{$name} = :{$name}";
                                     } else {
-                                        $setSql .= ",{$name} = ':{$name}'";
+                                        $setSql .= ",{$name} = :{$name}";
                                     }
                                 }
+                                break;
                         }
                     }
                 }
                 $sql .= $setSql;
 
-                $sql .= " WHERE id =:id";
+                $sql .= " WHERE id = :id";
             }
             else {
                 $sql .= "INSERT INTO  {$this->table} ";
                 $set = "";
                 $val = "";
-                /*foreach($data as $name => $value) {
-                    if($set == ""){
-                        $set .= " {$name}";
-                        $val .= " :{$name}";
-                    }
-                    else {
-                        $set .= ",{$name}";
-                        $val .= ",:{$name}";
-                    }
-                }*/
                 foreach($this->columns as $column) {
                     switch($column["name"]){
                         case "created":
@@ -356,32 +347,30 @@ SQL;
                             foreach($data as $name => $value) {
                                 if($column["name"] == $name) {
                                     if ($set == "") {
-                                        $set .= " {$name}";
-                                        $val .= " ':{$name}'";
+                                        $set .= "{$name}";
+                                        $val .= ":{$name}";
                                     } else {
                                         $set .= ",{$name}";
-                                        $val .= ",':{$name}'";
+                                        $val .= ",:{$name}";
                                     }
                                 }
                             }
                             break;
                     }
                 }
-                $sql .= "(" . $set . ") VALUES (" .$val .")";
+                $sql .= "(" . $set . ")VALUES(" .$val .")";
             }
-pr($sql);
-            $this->stmtObject = $this->dbObject->query($sql);
+            $this->stmtObject = $this->dbObject->prepare($sql);
             foreach($this->columns as $index => $value){
                 foreach($data as $key => $val){
                     if($value['name'] == $key){
                         $bindStr = ":" . $value['name'];
-                        $this->stmtObject->bindParam($bindStr,$val,$value['type']);
+                        $this->stmtObject->bindValue($bindStr,$val,$value['type']);
                     }
                 }
             }
             $this->stmtObject->execute();
             $this->commit();
-            pr($this->stmtObject);
         }catch (PDOException $ex){
             $this->rollback();
             throw($ex);

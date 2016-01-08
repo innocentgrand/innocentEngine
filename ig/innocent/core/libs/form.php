@@ -101,7 +101,7 @@ class Form extends core {
     }
     
     public function hidden($name, $value) {
-        return '<input type="hidden" name="'.$name.'" '.$value.' />';
+        return '<input type="hidden" name="'.$name.'" value="'.$value.'"" />';
     }
     
     public function submit($name="submit",$value="submit",$opt=array()){
