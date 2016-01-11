@@ -44,7 +44,9 @@ class Controller extends Core {
     protected $_contentData;
     protected $_layoutData;
 
-    public function __construct(){
+    protected  $debugmode = false;
+
+    public function __construct($arg = null){
         parent::__construct();
         $this->params = array(
                     'get' => $_GET,
@@ -56,6 +58,11 @@ class Controller extends Core {
         $this->form = new Form();
         $this->form->dataSetter($this->params);
 		$this->tplflg = true;
+        if($arg) {
+            if($arg["debug"]) {
+                $this->debugmode = $arg["debug"];
+            }
+        }
     }
 
     public function startUp(){
