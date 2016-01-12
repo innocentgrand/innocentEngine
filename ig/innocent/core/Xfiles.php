@@ -71,8 +71,12 @@ try {
 	}
 
 
-
-	$x_object = $FWM->makeCObject();
+	if(empty($arg)) {
+		$x_object = $FWM->makeCObject();
+	}
+	else {
+		$x_object = $FWM->makeCObject($arg);
+	}
 
 
 	$x_object->logDirSetter($FWM->getLogDirPath());

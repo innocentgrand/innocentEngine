@@ -58,9 +58,11 @@ class Controller extends Core {
         $this->form = new Form();
         $this->form->dataSetter($this->params);
 		$this->tplflg = true;
-        if($arg) {
-            if($arg["debug"]) {
-                $this->debugmode = $arg["debug"];
+        if(!empty($arg)) {
+            if(!empty($arg["debug"])) {
+                if ($arg["debug"] == true) {
+                    $this->debugmode = $arg["debug"];
+                }
             }
         }
     }
