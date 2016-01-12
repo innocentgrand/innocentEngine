@@ -32,14 +32,12 @@ try {
 
 	$x_prefix = "";
 
-	$debugmodeFlg = false;
-
 	if ($xmode) {
 		if ($xmode['SETTING']) {
 			if ($xmode['SETTING']['MODE']) {
 				if ($xmode['SETTING']['MODE'] == CONFIG::MODE_SET_DEBUG) {
 					error_reporting(-1);
-					$debugmodeFlg = true;
+					$arg["debug"] = true;
 				} else {
 					error_reporting(0);
 				}

@@ -22,8 +22,6 @@ class XFile {
 	private $x_config;
 
 	private $x_protcol;
-
-	private $hierarchy;
 	
 	private $x_request;
 
@@ -81,32 +79,10 @@ class XFile {
 
 	private $subDirName;	
 	private $subClassName;	
-	public function makeCObject(){
+	public function makeCObject($arg = null){
             $x_parse_url = parse_url($this->x_request);
             $x_exp_path = explode('/',$x_parse_url['path']);
             $this->x_exp_path = $x_exp_path;
-            foreach((array)$this->hierarchy as $hiKey => $hiValue){
-                if(!empty($x_exp_path[1])){
-                        $tmpPath = "/" . $x_exp_path[1];
-                }
-                else {
-                        $tmpPath = "";
-                }
-                if($hiValue['alias'] == $tmpPath){
-
-                    if(empty($x_exp_path[2]) || $x_exp_path[2] == ""){
-                            $x_class_sub_name = "Default";
-                    }
-                    else {
-                            $x_class_sub_name = ucfirst($x_exp_path[2]);
-                    }
-                    $x_class_name = $x_class_sub_name."Controller";
-                    $x_controller_file = $this->x_path_controller . $hiValue['hi']['hi'] . DS . self::DIRNAME_CONT  . DS . $x_class_name . ".php";
-                    $this->subClassName = $x_class_sub_name;
-
-                    return $this->makeObject($x_class_name,$x_controller_file);
-                }
-            }
 
             if($x_exp_path[1] == ""){
                     $x_class_sub_name = "Default";
@@ -135,19 +111,24 @@ class XFile {
 		return false;
 	}
 
-	private function makeObject($className,$path){
-            if(!file_exists($path)){
-                    throw new Exception("controller file not exists");
-            }	
-            require_once($path);
+	private function makeObject($className,$path,$arg=null){
+		if(!file_exists($path)){
+				throw new Exception("controller file not exists");
+		}
+		require_once($path);
 
-            if(!class_exists($className)){
-                    throw new Exception("class not exists");
-            }
+		if(!class_exists($className)){
+				throw new Exception("class not exists");
+		}
 
-            $x_object = new $className();
+		if(empty($arg)) {
+			$x_object = new $className();
+		}
+		else {
+			$x_object = new $className($arg);
+		}
 
-            return $x_object;
+		return $x_object;
 	}
 
 	public function getViewPath(){
